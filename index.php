@@ -13,4 +13,5 @@ if (!$db) {
 }
  
 $result = pg_query($db, "SELECT statement goes here");
+echo "bla bla bla";
 ?>
