@@ -14,4 +14,9 @@ if (!$db) {
  
 $result = pg_query($db, "SELECT * FROM employees");
 echo "bla bla bla";
+
+while($row = pg_fetch_row($result)){
+  echo "$row[0] $row[1] $row[2] $row[3] \n";
+}
+
 ?>
