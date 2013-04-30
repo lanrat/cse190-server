@@ -7,7 +7,7 @@ $db = new PDO($dsn);
 $query = "SELECT employee_id, last_name, first_name" .
          "FROM employees";
 
-$result = $db->query($quer);
+$result = $db->query($query);
 
 while($row = $result->fetch(PDO::FETCH_ASSOC)){
   echo $row["employee_id"] . $row["last_name"] . $row["first_name"];
