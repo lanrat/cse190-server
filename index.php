@@ -6,11 +6,11 @@ function pg_connection_string() {
 }
  
 # Establish db connection
-/*$db = pg_connect(pg_connection_string());
+$db = pg_connect(pg_connection_string());
 if (!$db) {
    echo "Database connection error."
    exit;
-}*/
+}
  
 $result = pg_query($db, "SELECT * FROM employees");
 echo "bla bla bla";
@@ -18,5 +18,7 @@ echo "bla bla bla";
 while($row = pg_fetch_row($result)){
   echo "$row[0] $row[1] $row[2] $row[3] \n";
 }
+
+echo "IS DONE YO";
 
 ?>
