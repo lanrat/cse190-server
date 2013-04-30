@@ -10,7 +10,7 @@ $query = "SELECT employee_id, last_name, first_name" .
 $result = $db->query($quer);
 
 while($row = $result->fetch(PDO::FETCH_ASSOC)){
-  echo "$row["employee_id"] $row["last_name"] $row["first_name"]\n";
+  echo $row["employee_id"] . $row["last_name"] . $row["first_name"];
 }
 
 echo "IS DONE YO";
