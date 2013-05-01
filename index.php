@@ -1,11 +1,14 @@
 <?php
 echo "bla bla bla";
-$dsn = "pgsql:"
-    . "dbname=d9f15upnpf30jn host=ec2-54-225-106-211.compute-1.amazonaws.com user=whuakxgtjhychs password=6PV1qeLaRHp7PLGcQcfGaZj4mN port=5432 sslmode=require";
-$db = new PDO($dsn);
 
-$query = "SELECT employee_id, last_name, first_name" .
-         "FROM employees";
+
+function pg_connection_string_from_database_url() {
+  extract(parse_url($_ENV["DATABASE_URL"]));
+  return "user=$user password=$pass host=$host dbname=" . substr($path, 1)"
+       . " sslmode=require";
+
+
+$pg_conn = pg_connect(pg_connection_string_from_database_url());
 
 $result = $db->query($query);
 
