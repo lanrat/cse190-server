@@ -11,7 +11,7 @@ function pg_connection_string_from_database_url() {
 
 $pg_conn = pg_connect(pg_connection_string_from_database_url());
 
-$result = pg_query($pg_conn, "SELECT employee_id, last_name, first_name FROM employee");
+$result = pg_query($pg_conn, "SELECT employee_id, last_name, first_name FROM employees");
 
 while($row = $result->fetch(PDO::FETCH_ASSOC)){
   echo "cmon man";
