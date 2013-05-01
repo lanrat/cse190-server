@@ -14,8 +14,7 @@ $pg_conn = pg_connect(pg_connection_string_from_database_url());
 $result = pg_query($pg_conn, "SELECT employee_id, last_name, first_name FROM employees");
 
 while($row = pg_fetch_row($result)){
-  echo "cmon man";
-  echo $row["employee_id"] . $row["last_name"] . $row["first_name"];
+  echo $row[0] . " " . $row[1] . " " . $row[2];
 }
 
 echo "IS DONE YO";
