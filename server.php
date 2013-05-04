@@ -4,7 +4,7 @@
 
     public function serve(){
       $method = $_GET['action'];
-      
+      echo  $method;
       switch($method){
         case "getFortunesSubmitted":
           break;
