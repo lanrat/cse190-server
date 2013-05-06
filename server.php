@@ -24,6 +24,7 @@
           echo "Default";
           $fortune = json_decode($_POST['json']);
           var_dump($fortune);
+          echo "<br><br> json = " . ($_POST['json']);
           break;
       }
     }
