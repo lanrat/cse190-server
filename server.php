@@ -7,7 +7,6 @@
       echo  $method;
       switch($method){
         case "getFortunesSubmitted":
-          echo $method;
           break;
         case "getFortune":
           break;
