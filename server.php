@@ -7,16 +7,17 @@
       
       switch($method){
         case "getFortunesSubmitted":
+          echo $method;
           break;
-        case: "getFortune":
+        case "getFortune":
           break;
-        case: "submitVote":
+        case "submitVote":
           break;
-        case: "submitFortune":
+        case "submitFortune":
           break;
-        case: "submitFlag":
+        case "submitFlag":
           break;
-        case: "submitView":
+        case "submitView":
           break;
         default:
           echo "Default";
