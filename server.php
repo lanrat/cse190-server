@@ -9,6 +9,8 @@
         case "getFortunesSubmitted":
           break;
         case "getFortune":
+          $fortune = json_decode($_POST['json']);
+          var_dump($fortune);
           break;
         case "submitVote":
           break;
@@ -20,7 +22,9 @@
           break;
         default:
           echo "Default";
-        break;
+          $fortune = json_decode($_POST['json']);
+          var_dump($fortune);
+          break;
       }
     }
 
