@@ -2,7 +2,7 @@
 
   class Server{
 
-    public function heroku_conn() {
+    function heroku_conn() {
       extract(parse_url($_ENV["DATABASE_URL"]));
       $string = "user=$user password=$pass host=$host dbname=" . substr($path, 1);
       $string . " sslmode=require";
@@ -12,7 +12,7 @@
     public function serve(){
       $method = $_GET['action'];
       if($method != NULL){
-        $pg_conn = pg_connect(heroku_conn());
+        $pg_conn = pg_connect(this->heroku_conn());
       }
       switch($method){
         case "getFortunesSubmitted":
