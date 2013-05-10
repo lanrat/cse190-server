@@ -24,9 +24,9 @@
 
 
           $result = pg_execute($pg_conn, "getFortunesSubmitted", $insert);
-          while($row = pg_fetch_assoc($result)){
-            echo(json_encode($row));
+          while($row[] = pg_fetch_assoc($result)){
           }
+            echo(json_encode($row));
           
           break;
         case "getFortune":
