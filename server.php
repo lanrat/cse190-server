@@ -16,19 +16,16 @@
       }
       switch($method){
         case "getFortunesSubmitted":
-          echo "YEAH";
           $fortune = json_decode($_POST['json'], true);
           $insert = array($fortune["user"]);
           $result = pg_prepare($pg_conn, "getFortunesSubmitted",
-          'SELECT fortuneid, text, upvote, downvote, views, uploader,
-          uploaddate 
+          'SELECT fortuneid, text, upvote, downvote, views, uploaddate 
           FROM fortunes WHERE uploader = $1');
 
 
           $result = pg_execute($pg_conn, "getFortunesSubmitted", $insert);
           while($row = pg_fetch_assoc($result)){
-            var_dump($row);
-            echo(json_encode($result));
+            echo(json_encode($row));
           }
           
           break;
