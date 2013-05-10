@@ -19,7 +19,10 @@
           echo "YEAH";
           $fortune = json_decode($_POST['json'], true);
           $insert = array($fortune["user"]);
-          $result = pg_prepare($pg_conn, "getFortunesSubmitted", 'SELECT * FROM fortunes WHERE uploader = $1');
+          $result = pg_prepare($pg_conn, "getFortunesSubmitted",
+          'SELECT fortuneid, text, upvote, downvote, views, uploader,
+          uploaddate 
+          FROM fortunes WHERE uploader = $1');
 
 
           $result = pg_execute($pg_conn, "getFortunesSubmitted", $insert);
