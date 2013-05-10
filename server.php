@@ -16,6 +16,7 @@
       }
       switch($method){
         case "getFortunesSubmitted":
+          $echo "YEAH";
           $fortune = json_decode($_POST['json']);
           $insert = array($fortune["user"]);
           $result = pg_prepare($pg_conn, "getFortunesSubmitted", 'SELECT * FROM fortunes WHERE uploader = $1');
