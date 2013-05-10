@@ -2,7 +2,7 @@
 
   class Server{
 
-    function pg_connection_string_from_database_url() {
+    public function pg_connection_string_from_database_url() {
       extract(parse_url($_ENV["DATABASE_URL"]));
       $string = "user=$user password=$pass host=$host dbname=" . substr($path, 1);
       $string . " sslmode=require";
@@ -16,7 +16,7 @@
       }
       switch($method){
         case "getFortunesSubmitted":
-          $echo "YEAH";
+          echo "YEAH";
           $fortune = json_decode($_POST['json']);
           $insert = array($fortune["user"]);
           $result = pg_prepare($pg_conn, "getFortunesSubmitted", 'SELECT * FROM fortunes WHERE uploader = $1');
