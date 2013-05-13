@@ -50,9 +50,22 @@
 
           break;
         case "submitFortune":
+          $fortune = json_decode($_POST['json'], true);
+          $insert = array($fortune["text"], $fortune["date"], $fortune["user"]);
+         
+          //NEED to fix this
+          $result = pg_prepare($pg_conn, "submitFortune",
+          'INSERT INTO fortunes ( text, uploader, uploaddate)
+           VALUES (?, ? , ?, ? ,? ,?, ?, ?, ?)');
+
+
+          $result = pg_execute($pg_conn, "submitFortune", $insert);
+         
+          
+            
           break;
         case "submitView":
-          
+            
           break;
         default:
           echo "Default";
