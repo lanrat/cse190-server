@@ -30,8 +30,17 @@
           
           break;
         case "getFortune":
-          $fortune = json_decode($_POST['json']);
-          var_dump($fortune);
+          $fortune = json_decode($_POST['json'],true);
+          $insert = array($fortune["fortuneid"]);
+          $result = pg_prepare($pg_conn, "getFortune",
+          'SELECT fortuneid, text, upvote, downvote, views, uploaddate 
+          FROM fortunes WHERE fortuneid = $1');
+          $result = pg_execute($pg_conn, "getFortune", $insert);
+          while($row[] = pg_fetch_assoc($result)){
+          }
+            echo(json_encode($row));
+          
+          //var_dump($fortune);
           break;
         case "submitVote":
           break;
