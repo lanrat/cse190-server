@@ -64,6 +64,7 @@
         
         case "submitView":
           $fortune = json_decode($_POST['json'], true);
+          $insert = array($fortune["userid"], $fortune["user"], $fortune["vote"], $fortune["flagged"]);
           $result = pg_prepare($pg_conn, "submitView",
           'INSERT INTO viewed (userid, fortuneid, vote, flagged)
            SELECT $1, $2, $3, $4
@@ -71,8 +72,11 @@
            userid = $1
            AND fortuneid = $2');
 
-           $result = pg_execute($pg_conn, "viewMaintenance",
-           'UPDATE 
+          $result = pg_execute($pg_conn, "viewMaintenance", $insert);
+
+          $result = pg_prepare($pg_conn, "updateView", 'UPDATE fortunes WHERE fortuneID = $2 
+            SET views = views + $3 
+            SET flagged = flagged + $4');
           break;
 
         default:
