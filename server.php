@@ -56,17 +56,25 @@
           //NEED to fix this
           $result = pg_prepare($pg_conn, "submitFortune",
           'INSERT INTO fortunes ( text, uploader, uploaddate)
-           VALUES (?, ? , ?, ? ,? ,?, ?, ?, ?)');
-
+           VALUES ($1, $2 , $3)');
 
           $result = pg_execute($pg_conn, "submitFortune", $insert);
-         
-          
             
           break;
+        
         case "submitView":
-            
+          $fortune = json_decode($_POST['json'], true);
+          $result = pg_prepare($pg_conn, "submitView",
+          'INSERT INTO viewed (userid, fortuneid, vote, flagged)
+           SELECT $1, $2, $3, $4
+           WHERE NOT EXISTS (SELECT userid FROM viewed WHERE
+           userid = $1
+           AND fortuneid = $2');
+
+           $result = pg_execute($pg_conn, "viewMaintenance",
+           'UPDATE 
           break;
+
         default:
           echo "Default";
           $fortune = json_decode($_POST['json']);
