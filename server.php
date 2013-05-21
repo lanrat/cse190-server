@@ -24,21 +24,36 @@
 
 
           $result = pg_execute($pg_conn, "getFortunesSubmitted", $insert);
-          while($row[] = pg_fetch_assoc($result)){
-          }
-            echo(json_encode($row));
+          $rows = pg_fetch_all($result);
+          /*while($row[] = pg_fetch_assoc($result)){
+          }*/
+          echo(json_encode($rows));
           
           break;
         case "getFortune":
+          $fortune = json_decode($_POST['json'], true);
+          $insert = array($fortune["user"]);
+          $result = pg_prepare($pg_conn, "getFortune",
+          'SELECT fortuneid, text, upvote, downvote, views, uploaddate 
+          FROM fortunes WHERE fortuneid NOT IN 
+          (SELECT fortuneid FROM viewed WHERE userid = $1)');
+
+          $result = pg_execute($pg_conn, "getFortune", $insert);
+          $rows = pg_fetch_all($result);
+          $randomFortune = rand(0, count($rows) - 1);
+          echo(json_encode($rows[$randomFortune]));
+
+          break;
+        case "getFortuneByID":
 
           $fortune = json_decode($_POST['json'], true);
           $insert = array($fortune["fortuneid"]);
-          $result = pg_prepare($pg_conn, "getFortune",
+          $result = pg_prepare($pg_conn, "getFortuneByID",
           'SELECT fortuneid, text, upvote, downvote, views, uploaddate 
           FROM fortunes WHERE fortuneid = $1');
 
 
-          $result = pg_execute($pg_conn, "getFortune", $insert);
+          $result = pg_execute($pg_conn, "getFortuneByID", $insert);
           while($row[] = pg_fetch_assoc($result)){
           }
             echo(json_encode($row));
@@ -59,6 +74,13 @@
            VALUES ($1, $2, $3)');
 
           $result = pg_execute($pg_conn, "submitFortune", $insert);
+          if($result == false){
+            $return = array("accepted" => false);
+          }else{
+            $return = array("accepted" => true);
+          }
+
+          echo(json_encode($return));
             
           break;
         
