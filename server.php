@@ -77,10 +77,32 @@
             echo(json_encode($row));
           
           break;
-        case "submitUpdate":
-
-
-
+        case "submitVote":
+          $fortune = json_decode($_POST['json'], true);
+          $insert = array($fortune["fortuneid"],  $fortune["user"], $fortune["vote"] );
+         
+          $result = pg_prepare($pg_conn, "submitVote",
+          'UPDATE views SET vote = '$3' WHERE fortuneid = '$1' AND userid ='$2' AND vote='0' )';
+          $result = pg_execute($pg_conn, "submitVote", $insert);
+          if($result == false)
+          {
+              
+          }
+          else
+          {
+              if($fortunes["vote"] == 1)
+              {
+                $result = pg_prepare($pg_conn, "updateVote",
+                'UPDATE fortunes SET upvote = '$3' WHERE fortuneid = '$1' )';
+                $result = pg_execute($pg_conn, "updateVote", $insert);
+              }
+              else 
+              {
+                $result = pg_prepare($pg_conn, "updateVote",
+                'UPDATE fortunes SET downvote = '$3' WHERE fortuneid = '$1' )';
+                $result = pg_execute($pg_conn, "updateVote", $insert);             
+              }
+          }
           break;
 
           /* Method name: submitFortune
