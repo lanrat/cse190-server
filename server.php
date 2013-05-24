@@ -73,9 +73,9 @@
 
 
           $result = pg_execute($pg_conn, "getFortuneByID", $insert);
-          while($row[] = pg_fetch_assoc($result)){
-          }
-          echo(json_encode($row));
+          $row[] = pg_fetch_assoc($result);
+          $return = array('accepted' => true, 'result' => $row);
+          echo(json_encode($return));
           
           break;
         case "submitVote":
