@@ -140,16 +140,12 @@
         //logging output Date - JSON Object
         $current = file_get_contents('serverlogs.log');
         $current .= "\n\nNEW LOG: ";
-        $current .= date;
+        $current .= date();
         $current .= "---------------------------\n";
         $current .= var_dump($fortune);
         file_put_contents('serverlogs.log', $current);
       }
     }
-
-
-
-
   }
 
   $server = new Server;
