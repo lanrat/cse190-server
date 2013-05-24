@@ -163,7 +163,7 @@
       $current .= "\n\nNEW LOG: ";
       $current .= date('l jS \of F Y h:i:s A');
       $current .= "---------------------------\n";
-      $current .= "action: " . $action . "\n";
+      $current .= "action: " . $method . "\n";
       if($fortune != NULL){
         //logging output Date - JSON Object
         $current .= var_export($fortune, true);
