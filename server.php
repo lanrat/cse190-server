@@ -83,7 +83,7 @@
           $insert = array($fortune["fortuneid"],  $fortune["user"], $fortune["vote"] );
          
           $result = pg_prepare($pg_conn, "submitVote",
-          'UPDATE views SET vote = $3 WHERE fortuneid = $1 AND userid =$ AND vote= 0 ');
+          'UPDATE views SET vote = $3 WHERE fortuneid = $1 AND userid = $2 AND vote= 0 ');
           $result = pg_execute($pg_conn, "submitVote", $insert);
           if($result == false)
           {
@@ -164,7 +164,7 @@
         $current .= "\n\nNEW LOG: ";
         $current .= date('l jS \of F Y h:i:s A');
         $current .= "---------------------------\n";
-        $current .= print_r($_POST['json']);
+        $current .= var_dump($_POST['json']);
         file_put_contents('serverlogs.log', $current);
       }
     }
