@@ -164,7 +164,7 @@
         $current .= "\n\nNEW LOG: ";
         $current .= date('l jS \of F Y h:i:s A');
         $current .= "---------------------------\n";
-        $current .= print_r($_POST['json']);
+        $current .= var_export($fortune);
         file_put_contents('serverlogs.log', $current);
       }
     }
