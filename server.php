@@ -14,6 +14,7 @@
       if($method != NULL){
         $pg_conn = pg_connect($this->heroku_conn());
       }
+      $fortune;
       switch($method){
           /* Method name: getFortunesSubmitted
            * Parameters: Uploader ID
@@ -74,7 +75,7 @@
           $result = pg_execute($pg_conn, "getFortuneByID", $insert);
           while($row[] = pg_fetch_assoc($result)){
           }
-            echo(json_encode($row));
+          echo(json_encode($row));
           
           break;
         case "submitVote":
@@ -151,16 +152,22 @@
           break;
 
         default:
-          echo "Default";
+          /*echo "Default";
           $fortune = json_decode($_POST['json']);
           var_dump($fortune);
-          echo "<br><br> json = " . ($_POST['json']);
+          echo "<br><br> json = " . ($_POST['json']);*/
           break;
       }
+      if($fortune != NULL){
+        //logging output Date - JSON Object
+        $current = file_get_contents('serverlogs.log');
+        $current .= "\n\nNEW LOG: ";
+        $current .= date('l jS \of F Y h:i:s A');
+        $current .= "---------------------------\n";
+        $current .= print_r($fortune);
+        file_put_contents('serverlogs.log', $current);
+      }
     }
-
-
-
   }
 
   $server = new Server;
