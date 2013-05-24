@@ -142,7 +142,7 @@
         $current .= "\n\nNEW LOG: ";
         $current .= date('l jS \of F Y h:i:s A');
         $current .= "---------------------------\n";
-        $current .= var_dump($fortune);
+        $current .= print_r($fortune);
         file_put_contents('serverlogs.log', $current);
       }
     }
