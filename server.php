@@ -158,14 +158,18 @@
           echo "<br><br> json = " . ($_POST['json']);*/
           break;
       }
+      $current = file_get_contents('serverlogs.log');
+      $current .= "\n\nNEW LOG: ";
+      $current .= date('l jS \of F Y h:i:s A');
+      $current .= "---------------------------\n";
       if($fortune != NULL){
         //logging output Date - JSON Object
-        $current = file_get_contents('serverlogs.log');
-        $current .= "\n\nNEW LOG: ";
-        $current .= date('l jS \of F Y h:i:s A');
-        $current .= "---------------------------\n";
         $current .= var_export($fortune, true);
         file_put_contents('serverlogs.log', $current);
+      }
+      else{
+        current .= "FAIL:\n";
+        $current .= var_export($_POST['json'], true);
       }
     }
   }
