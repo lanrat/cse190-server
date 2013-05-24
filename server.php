@@ -51,14 +51,14 @@
           $rows = pg_fetch_all($result);
           $randomFortune = rand(0, count($rows) - 1);
           $chosen = $rows[$randomFortune];
-          echo(json_encode($rows[$chosen]));
+          echo(json_encode($chosen));
 
 
           $result = pg_prepare($pg_conn, "insertView",
           "INSERT INTO viewed
           VALUES ($1, $2, 0, 'false')");
 
-          $insert = array($fortune["userid"], $chosen["fortuneid"]);
+          $insert = array($fortune["user"], $chosen["fortuneid"]);
           $result = pg_execute($pg_conn, "insertView", $insert);
 
           break;
