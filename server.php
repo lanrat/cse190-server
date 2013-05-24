@@ -10,6 +10,7 @@
     }
 
     public function serve(){
+      var_dump($_POST);
       $method = $_GET['action'];
       if($method != NULL){
         $pg_conn = pg_connect($this->heroku_conn());
