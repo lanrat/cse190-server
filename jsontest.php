@@ -1,9 +1,11 @@
 <?php
 
 // Create map with request parameters
-$params = array ('json' => json_encode(array ("user" => "1", "fortuneid" => "1", "text" => "You will get straight F's")));
+//$params = array ('json' => json_encode(array ("user" => "1", "fortune_id" => "1", "text" => "You will get straight F's")));
  
-// Build Http query using params
+$params = array ('json' => json_encode(array ("user" => "1"));
+
+
 $query = http_build_query ($params);
  
 // Create Http context details
