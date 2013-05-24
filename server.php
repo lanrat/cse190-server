@@ -165,12 +165,12 @@
       if($fortune != NULL){
         //logging output Date - JSON Object
         $current .= var_export($fortune, true);
-        file_put_contents('serverlogs.log', $current);
       }
       else{
         current .= "FAIL:\n";
         $current .= var_export($_POST['json'], true);
       }
+      file_put_contents('serverlogs.log', $current);
     }
   }
 
