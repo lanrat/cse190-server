@@ -15,6 +15,10 @@
         $pg_conn = pg_connect($this->heroku_conn());
       }
       switch($method){
+          /* Method name: getFortunesSubmitted
+           * Parameters: Uploader ID
+           * Returns: All fortunes uploaded by the user.
+           */
         case "getFortunesSubmitted":
           $fortune = json_decode($_POST['json'], true);
           $insert = array($fortune["user"]);
@@ -29,6 +33,11 @@
             echo(json_encode($row));
           
           break;
+
+          /* Method name: getFortune
+           * Parameters: Fortune ID
+           * Returns: All data about a specific fortune.
+           */
         case "getFortune":
 
           $fortune = json_decode($_POST['json'], true);
@@ -49,11 +58,16 @@
 
 
           break;
+
+          /* Method name: submitFortune
+           * Parameters: Fortune text(actual fortune), Uploader ID 
+           * Returns: void
+           * Note: the time parameter is generated in php. 
+           */
         case "submitFortune":
           $fortune = json_decode($_POST['json'], true);
           $insert = array($fortune["text"],  $fortune["user"], time() );
          
-          //NEED to fix this
           $result = pg_prepare($pg_conn, "submitFortune",
           'INSERT INTO fortunes ( text, uploader, uploaddate)
            VALUES ($1, $2, $3)');
@@ -61,7 +75,11 @@
           $result = pg_execute($pg_conn, "submitFortune", $insert);
             
           break;
-        
+          /* Method name: submitView
+           * Parameters: UploaderID, FortuneID, int Vote, int Flagged
+           * Returns: void
+           * Note: Database attributes: views, and flags increase by the parameters passed respectively.  
+           */
         case "submitView":
           $fortune = json_decode($_POST['json'], true);
           $insert = array($fortune["userid"], $fortune["user"], $fortune["vote"], $fortune["flagged"]);
@@ -71,7 +89,7 @@
            WHERE NOT EXISTS (SELECT userid FROM viewed WHERE
            userid = $1
            AND fortuneid = $2');
-
+           /*** Needs to be fixed****/
           $result = pg_execute($pg_conn, "viewMaintenance", $insert);
 
           $result = pg_prepare($pg_conn, "updateView", 'UPDATE fortunes WHERE fortuneID = $2 
