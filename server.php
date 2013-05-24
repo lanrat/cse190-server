@@ -140,7 +140,7 @@
         //logging output Date - JSON Object
         $current = file_get_contents('serverlogs.log');
         $current .= "\n\nNEW LOG: ";
-        $current .= date();
+        $current .= date('l jS \of F Y h:i:s A');
         $current .= "---------------------------\n";
         $current .= var_dump($fortune);
         file_put_contents('serverlogs.log', $current);
