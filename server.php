@@ -82,7 +82,9 @@
           $fortune = json_decode($_POST['json'], true);
           $insert = array($fortune["fortuneid"],  $fortune["user"], $fortune["vote"]);                                
           $result = pg_prepare($pg_conn, "submitVote",
+
           'UPDATE views SET vote = $3 WHERE fortuneid = $1 AND userid = $2 AND vote= 0');
+
           $result = pg_execute($pg_conn, "submitVote", $insert);
           if($result == false)
           {
@@ -157,15 +159,20 @@
           echo "<br><br> json = " . ($_POST['json']);*/
           break;
       }
+      $current = file_get_contents('serverlogs.log');
+      $current .= "\n\nNEW LOG: ";
+      $current .= date('l jS \of F Y h:i:s A');
+      $current .= "---------------------------\n";
+      $current .= "action: " . $action . "\n";
       if($fortune != NULL){
         //logging output Date - JSON Object
-        $current = file_get_contents('serverlogs.log');
-        $current .= "\n\nNEW LOG: ";
-        $current .= date('l jS \of F Y h:i:s A');
-        $current .= "---------------------------\n";
-        $current .= print_r($_POST['json']);
-        file_put_contents('serverlogs.log', $current);
+        $current .= var_export($fortune, true);
       }
+      else{
+        $current .= "FAIL:\n";
+        $current .= var_export($_POST['json'], true);
+      }
+      file_put_contents('serverlogs.log', $current);
     }
   }
 
