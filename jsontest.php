@@ -20,7 +20,7 @@ $context = stream_context_create (array ( 'http' => $contextData ));
  
 // Read page rendered as result of your POST request
 $result =  file_get_contents (
-                  'http://cse-190-fortune.herokuapp.com/server.php?action=getFortune',
+                  'http://cse-190-fortune.herokuapp.com/server.php?action=submitFortune',
                   false,
                   $context);
  
