@@ -50,7 +50,16 @@
           $result = pg_execute($pg_conn, "getFortune", $insert);
           $rows = pg_fetch_all($result);
           $randomFortune = rand(0, count($rows) - 1);
-          echo(json_encode($rows[$randomFortune]));
+          $chosen = $rows[$randomFortune];
+          echo(json_encode($rows[$chosen]));
+
+
+          $result = pg_prepare($pg_conn, "insertView",
+          "INSERT INTO viewed
+          VALUES ($1, $2, 0, 'false')");
+
+          $insert = array($fortune["userid"], $chosen["fortuneid"]);
+          $result = pg_execute($pg_conn, "insertView", $insert);
 
           break;
         case "getFortuneByID":
@@ -104,7 +113,7 @@
            */
         case "submitView":
           $fortune = json_decode($_POST['json'], true);
-          $insert = array($fortune["userid"], $fortune["user"], $fortune["vote"], $fortune["flagged"]);
+          $insert = array($fortune["userid"], $fortune["fortuneid"], $fortune["vote"], $fortune["flagged"]);
           $result = pg_prepare($pg_conn, "submitView",
           'INSERT INTO viewed (userid, fortuneid, vote, flagged)
            SELECT $1, $2, $3, $4

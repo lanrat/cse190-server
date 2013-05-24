@@ -3,7 +3,7 @@
 // Create map with request parameters
 //$params = array ('json' => json_encode(array ("user" => "1", "fortune_id" => "1", "text" => "You will get straight F's")));
  
-$params = array ('json' => json_encode(array ("user" => "1")));
+$params = array ('json' => json_encode(array ("user" => "10")));
 
 
 $query = http_build_query ($params);
