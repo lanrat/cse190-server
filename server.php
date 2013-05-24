@@ -164,7 +164,7 @@
         $current .= "\n\nNEW LOG: ";
         $current .= date('l jS \of F Y h:i:s A');
         $current .= "---------------------------\n";
-        $current .= var_export($fortune);
+        $current .= var_export($fortune, true);
         file_put_contents('serverlogs.log', $current);
       }
     }
