@@ -79,7 +79,7 @@
 
           $result = pg_execute($pg_conn, "getFortuneByID", $insert);
           $row = pg_fetch_assoc($result);
-          processResult($row);
+          $this->processResult($row);
           
           break;
 
