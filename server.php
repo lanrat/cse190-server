@@ -64,6 +64,7 @@
           $randomFortune = rand(0, count($rows) - 1);
           $chosen = $rows[$randomFortune];
           $this->processResult($chosen);
+          var_dump($chosen);
 
 
           $result = pg_prepare($pg_conn, "insertView",
