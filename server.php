@@ -10,7 +10,13 @@
     }
 
     public function processResult($result){
-      $return = array('accepted' => true, 'result' => $result);
+      if($result != false){    
+        $return = array('accepted' => true, 'result' => $result);
+      }
+      else{
+        $return = array('accepted' => false);
+      }
+
       echo(json_encode($return));
     }
 
@@ -21,10 +27,13 @@
       }
       $fortune;
       switch($method){
-          /* Method name: getFortunesSubmitted
-           * Parameters: Uploader ID
-           * Returns: All fortunes uploaded by the user.
-           */
+
+
+
+        /* Method name: getFortunesSubmitted
+         * Parameters: Uploader ID
+         * Returns: All fortunes uploaded by the user.
+         */
         case "getFortunesSubmitted":
           $fortune = json_decode($_POST['json'], true);
           $insert = array($fortune["user"]);
@@ -35,16 +44,13 @@
 
           $result = pg_execute($pg_conn, "getFortunesSubmitted", $insert);
           $rows = pg_fetch_all($result);
-          /*while($row[] = pg_fetch_assoc($result)){
-          }*/
-          echo(json_encode($rows));
-          
+          $this->processResult($rows);
           break;
 
-          /* Method name: getFortune
-           * Parameters: Fortune ID
-           * Returns: All data about a specific fortune.
-           */
+        /* Method name: getFortune
+         * Parameters: Fortune ID
+         * Returns: All data about a specific fortune.
+         */
         case "getFortune":
           $fortune = json_decode($_POST['json'], true);
           $insert = array($fortune["user"]);
@@ -57,7 +63,7 @@
           $rows = pg_fetch_all($result);
           $randomFortune = rand(0, count($rows) - 1);
           $chosen = $rows[$randomFortune];
-          echo(json_encode($chosen));
+          $this->processResult($row);
 
 
           $result = pg_prepare($pg_conn, "insertView",
@@ -83,6 +89,30 @@
           
           break;
 
+        /* Method name: submitFortune
+         * Parameters: Fortune text(actual fortune), Uploader ID 
+         * Returns: void
+         * Note: the time parameter is generated in php. 
+         */
+        case "submitFortune":
+          $fortune = json_decode($_POST['json'], true);
+          $insert = array($fortune["text"],  $fortune["user"], time() );
+         
+          $result = pg_prepare($pg_conn, "submitFortune",
+          'INSERT INTO fortunes ( text, uploader, uploaddate)
+           VALUES ($1, $2, $3) 
+           RETURNING ');
+
+          $result = pg_execute($pg_conn, "submitFortune", $insert);
+          if($result == false){
+            $return = array("accepted" => false);
+          }else{
+            $return = array("accepted" => true);
+          }
+
+          echo(json_encode($return));
+            
+          break;
 
         case "submitVote":
           $fortune = json_decode($_POST['json'], true);
@@ -113,34 +143,12 @@
           }
           break;
 
-          /* Method name: submitFortune
-           * Parameters: Fortune text(actual fortune), Uploader ID 
-           * Returns: void
-           * Note: the time parameter is generated in php. 
-           */
-        case "submitFortune":
-          $fortune = json_decode($_POST['json'], true);
-          $insert = array($fortune["text"],  $fortune["user"], time() );
-         
-          $result = pg_prepare($pg_conn, "submitFortune",
-          'INSERT INTO fortunes ( text, uploader, uploaddate)
-           VALUES ($1, $2, $3)');
 
-          $result = pg_execute($pg_conn, "submitFortune", $insert);
-          if($result == false){
-            $return = array("accepted" => false);
-          }else{
-            $return = array("accepted" => true);
-          }
-
-          echo(json_encode($return));
-            
-          break;
-          /* Method name: submitView
-           * Parameters: UploaderID, FortuneID, int Vote, int Flagged
-           * Returns: void
-           * Note: Database attributes: views, and flags increase by the parameters passed respectively.  
-           */
+        /* Method name: submitView
+         * Parameters: UploaderID, FortuneID, int Vote, int Flagged
+         * Returns: void
+         * Note: Database attributes: views, and flags increase by the parameters passed respectively.  
+         */
         case "submitView":
           $fortune = json_decode($_POST['json'], true);
           $insert = array($fortune["userid"], $fortune["fortuneid"], $fortune["vote"], $fortune["flagged"]);
@@ -165,6 +173,9 @@
           echo "<br><br> json = " . ($_POST['json']);*/
           break;
       }
+
+// Logs -------------------------------------------------------------
+
       date_default_timezone_set('America/Los_Angeles');
       $current = file_get_contents('serverlogs.log');
       $current .= "\n\nNEW LOG: ";
@@ -182,6 +193,8 @@
       file_put_contents('serverlogs.log', $current);
     }
   }
+
+// Main -------------------------------------------------------------
 
   $server = new Server;
   $server->serve();
