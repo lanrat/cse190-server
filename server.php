@@ -9,6 +9,11 @@
       return $string;
     }
 
+    public function processResult($result){
+      $return = array('accepted' => true, 'result' => $result);
+      echo(json_encode($return));
+    }
+
     public function serve(){
       $method = $_GET['action'];
       if($method != NULL){
@@ -73,9 +78,8 @@
 
 
           $result = pg_execute($pg_conn, "getFortuneByID", $insert);
-          $row[] = pg_fetch_assoc($result);
-          $return = array('accepted' => true, 'result' => $row);
-          echo(json_encode($return));
+          $row = pg_fetch_assoc($result);
+          processResult($row);
           
           break;
 
