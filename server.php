@@ -78,6 +78,8 @@
           echo(json_encode($return));
           
           break;
+
+
         case "submitVote":
           $fortune = json_decode($_POST['json'], true);
           $insert = array($fortune["fortuneid"],  $fortune["user"], $fortune["vote"]);                                
@@ -159,6 +161,7 @@
           echo "<br><br> json = " . ($_POST['json']);*/
           break;
       }
+      date_default_timezone_set('America/Los_Angeles');
       $current = file_get_contents('serverlogs.log');
       $current .= "\n\nNEW LOG: ";
       $current .= date('l jS \of F Y h:i:s A');

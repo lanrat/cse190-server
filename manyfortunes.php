@@ -295,7 +295,7 @@ $strings = explode("\n", "    “Welcome” is a powerful word.
     Your talents will be recognized and suitably rewarded.
     Your work interests can capture the highest status or prestige.");
 foreach($strings as $fort){
-  
+  $params = array ('json' => json_encode(array ("fortuneid" => 1)));
 }
 $params = array ('json' => json_encode(array ("fortuneid" => 1)));
 
