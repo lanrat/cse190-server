@@ -11,7 +11,7 @@
 
     public function processResult($result){
       if($result != false){    
-        $return = array('accepted' => true, 'result' => $result);
+        $return = array('accepted' => true, 'result' => array($result));
       }
       else{
         $return = array('accepted' => false);
@@ -64,7 +64,7 @@
           $randomFortune = rand(0, count($rows) - 1);
           $chosen = $rows[$randomFortune];
           $this->processResult($chosen);
-          echo var_dump($chosen);
+          //echo var_dump($chosen);
 
 
           $result = pg_prepare($pg_conn, "insertView",
