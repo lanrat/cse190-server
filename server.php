@@ -125,13 +125,13 @@
               if($fortune["vote"] == 1)
               {
                 $result = pg_prepare($pg_conn, "upVote",
-                'UPDATE fortunes SET upvote = '1' + upvote WHERE fortuneid = $1');
+                'UPDATE fortunes SET upvote = 1 + upvote WHERE fortuneid = $1');
                 $result = pg_execute($pg_conn, "upVote", $insert);
               }
               else 
               {
                 $result = pg_prepare($pg_conn, "downVote",
-                'UPDATE fortunes SET downvote = '-1' + downvote WHERE fortuneid = $1');
+                'UPDATE fortunes SET downvote = -1 + downvote WHERE fortuneid = $1');
                 $result = pg_execute($pg_conn, "downVote", $insert);             
               }
           }
