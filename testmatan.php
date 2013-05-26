@@ -1,6 +1,6 @@
 
 <?php
-$params = array ('json' => json_encode(array ("fortuneid" => 1, "user" => 1, "vote" => -1)));
+$params = array ('json' => json_encode(array ("fortuneid" => 1, "user" => 1, "vote" => 2)));
 
 
 $query = http_build_query ($params);
@@ -17,7 +17,7 @@ $context = stream_context_create (array ( 'http' => $contextData ));
  
 // Read page rendered as result of your POST request
 $result =  file_get_contents (
-                  'http://cse-190-fortune.herokuapp.com/server.php?action=getFortune',
+                  'http://cse-190-fortune.herokuapp.com/server.php?action=submitVote',
                   false,
                   $context);
  

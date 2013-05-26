@@ -57,7 +57,11 @@ action:
 FAIL:
 NULL
 
+<<<<<<< HEAD
 NEW LOG: Saturday 25th of May 2013 05:07:19 PM---------------------------
+=======
+NEW LOG: Saturday 25th of May 2013 04:57:18 PM---------------------------
+>>>>>>> 51da644efc5afaef4f05abff2be244ea2f3d371c
 action: 
 FAIL:
 NULL
