@@ -73,6 +73,7 @@
 
           $insert = array($fortune["user"], $chosen["fortuneid"]);
           $result = pg_execute($pg_conn, "insertView", $insert);
+          echo var_dump($result);
 
           break;
 
