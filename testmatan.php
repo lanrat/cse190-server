@@ -1,6 +1,6 @@
 
 <?php
-$params = array ('json' => json_encode(array ("fortuneid" => 1, "user" => 1, "vote" => -1)));
+$params = array ('json' => json_encode(array ("fortuneid" => 1, "user" => 1, "vote" => 2)));
 
 
 $query = http_build_query ($params);
