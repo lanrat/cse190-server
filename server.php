@@ -103,17 +103,11 @@
           $result = pg_prepare($pg_conn, "submitFortune",
           'INSERT INTO fortunes ( text, uploader, uploaddate)
            VALUES ($1, $2, $3) 
-           RETURNING ');
+           RETURNING fortuneid, text, upvote, downvote, views, uploaddate');
 
           $result = pg_execute($pg_conn, "submitFortune", $insert);
-          if($result == false){
-            $return = array("accepted" => false);
-          }else{
-            $return = array("accepted" => true);
-          }
+          $this->processResult(pg_fetch_assoc($result));
 
-          echo(json_encode($return));
-            
           break;
 
         case "submitVote":

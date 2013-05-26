@@ -295,12 +295,22 @@ $strings = explode("\n", "    “Welcome” is a powerful word.
     Your talents will be recognized and suitably rewarded.
     Your work interests can capture the highest status or prestige.");
 foreach($strings as $fort){
-  $params = array ('json' => json_encode(array ("fortuneid" => 1)));
+  $params = array ('json' => json_encode(array ("text" => $fort)));
+  $query = http_build_query ($params);
+  $contextData = array (
+                  'method' => 'POST',
+                  'header' => "Connection: close\r\n".
+                              "Content-Length: ".strlen($query)."\r\n",
+                  'content'=> $query );
+  $context = stream_context_create (array ( 'http' => $contextData ));
+  $result =  file_get_contents (
+                    'http://cse-190-fortune.herokuapp.com/server.php?action=submitFortune',
+                    false,
+                    $context);
 }
-$params = array ('json' => json_encode(array ("fortuneid" => 1)));
+/*//$params = array ('json' => json_encode(array ("fortuneid" => 1)));
 
-
-$query = http_build_query ($params);
+//$query = http_build_query ($params);
  
 // Create Http context details
 $contextData = array (
@@ -310,17 +320,17 @@ $contextData = array (
                 'content'=> $query );
  
 // Create context resource for our request
-$context = stream_context_create (array ( 'http' => $contextData ));
+//$context = stream_context_create (array ( 'http' => $contextData ));
  
 // Read page rendered as result of your POST request
 $result =  file_get_contents (
-                  'http://cse-190-fortune.herokuapp.com/server.php?action=sgetFortuneByID',
+                  'http://cse-190-fortune.herokuapp.com/server.php?action=submitFortune',
                   false,
                   $context);
  
 // Server response is now stored in $result variable so you can process it
 
-echo $result;
+echo $result;*/
 
 
 //var_dump($strings);
