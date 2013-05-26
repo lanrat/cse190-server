@@ -131,16 +131,15 @@
           {
               if($fortune["vote"] == 1)
               {
-                echo $fortune["vote"];
-                $result = pg_prepare($pg_conn, "updateVote",
+                $result = pg_prepare($pg_conn, "upVote",
                 'UPDATE fortunes SET upvote = $3 + upvote WHERE fortuneid = $1');
-                $result = pg_execute($pg_conn, "updateVote", $insert);
+                $result = pg_execute($pg_conn, "upVote", $insert);
               }
               else 
               {
-                $result = pg_prepare($pg_conn, "updateVote",
+                $result = pg_prepare($pg_conn, "downVote",
                 'UPDATE fortunes SET downvote = $3 + downvote WHERE fortuneid = $1');
-                $result = pg_execute($pg_conn, "updateVote", $insert);             
+                $result = pg_execute($pg_conn, "downVote", $insert);             
               }
           }
           break;
