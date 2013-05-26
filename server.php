@@ -114,7 +114,6 @@
           $fortune = json_decode($_POST['json'], true);
           $insert = array($fortune["fortuneid"],  $fortune["user"], $fortune["vote"]);                                
           $result = pg_prepare($pg_conn, "submitVote", 'UPDATE viewed SET vote = $3 WHERE fortuneid = $1 AND userid = $2 ');
-
           $result = pg_execute($pg_conn, "submitVote", $insert);
    
           if($result == false)
@@ -125,16 +124,15 @@
           {
               if($fortune["vote"] == 1)
               {
-
-                $result = pg_prepare($pg_conn, "updateVote",
-                'UPDATE fortunes SET upvote = $3 + upvote WHERE fortuneid = $1');
-                $result = pg_execute($pg_conn, "updateVote", $insert);
+                $result = pg_prepare($pg_conn, "upVote",
+                'UPDATE fortunes SET upvote = '1' + upvote WHERE fortuneid = $1');
+                $result = pg_execute($pg_conn, "upVote", $insert);
               }
               else 
               {
-                $result = pg_prepare($pg_conn, "updateVote",
-                'UPDATE fortunes SET downvote = $3 + downvote WHERE fortuneid = $1');
-                $result = pg_execute($pg_conn, "updateVote", $insert);             
+                $result = pg_prepare($pg_conn, "downVote",
+                'UPDATE fortunes SET downvote = '-1' + downvote WHERE fortuneid = $1');
+                $result = pg_execute($pg_conn, "downVote", $insert);             
               }
           }
           break;
