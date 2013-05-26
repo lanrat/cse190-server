@@ -131,7 +131,7 @@
           {
               if($fortune["vote"] == 1)
               {
-
+                echo $fortune["vote"];
                 $result = pg_prepare($pg_conn, "updateVote",
                 'UPDATE fortunes SET upvote = $3 + upvote WHERE fortuneid = $1');
                 $result = pg_execute($pg_conn, "updateVote", $insert);
