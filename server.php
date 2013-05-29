@@ -21,12 +21,13 @@
     }
 
     public function createUser($userid){
+      $insert = array($userid);
       $result = pg_prepare($pg_conn, "createUser",
       "INSERT INTO users (userid) 
       SELECT $1 
       WHERE NOT EXISTS(
         SELECT userid FROM users WHERE userid = $1");
-      $result = pg_execute($pg_conn, "createUser", array($userid));
+      $result = pg_execute($pg_conn, "createUser", $insert);
     }
 
     public function serve(){
