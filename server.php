@@ -37,7 +37,7 @@
       $fortune = json_decode($_POST['json'], true);
       // Store the user id if passed.
       if($fortune["user"] != NULL){
-        createUser($fortune["user"]);
+        $this->createUser($fortune["user"]);
       }
       switch($method){
         /* Method name: getFortunesSubmitted
