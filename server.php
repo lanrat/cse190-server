@@ -26,7 +26,7 @@
       $pg_conn = pg_connect($this->heroku_conn());
       $result = pg_prepare($pg_conn, "createUser",
       "INSERT INTO users 
-      VALUES ($1) 
+      SELECT $1 
       WHERE NOT EXISTS(
         SELECT userid FROM users WHERE userid = $1");
       $result = pg_execute($pg_conn, "createUser", $insert);
