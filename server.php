@@ -22,7 +22,7 @@
 
     public function createUser($userid){
       $insert = array($userid);
-        //echo "plz work: " . $userid . "\n";
+        echo "plz work: " . $insert . "\n";
       $result = pg_prepare($pg_conn, "createUser",
       "INSERT INTO users 
       VALUES ($1) 
