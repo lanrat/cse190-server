@@ -22,7 +22,8 @@
 
     public function createUser($userid){
       $insert = array($userid);
-      var_dump($insert);
+      //var_dump($insert);
+      $pg_conn = pg_connect($this->heroku_conn());
       $result = pg_prepare($pg_conn, "createUser",
       "INSERT INTO users 
       VALUES ($1) 
@@ -38,7 +39,7 @@
       }
       $fortune = json_decode($_POST['json'], true);
       // Store the user id if passed.
-      if($fortune["debug"] != NULL && $fortune["user"] != NULL){
+      if($fortune["user"] != NULL){
         //echo "plz work: " . $fortune["user"] . "\n";
         $this->createUser($fortune["user"]);
       }

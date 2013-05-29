@@ -4,7 +4,7 @@
 //$params = array ('json' => json_encode(array ("user" => "1", "fortune_id" => "1", "text" => "You will get straight F's")));
  
 //$params = array ('json' => json_encode(array ("user" => "100")));
-$params = array ('json' => json_encode(array ("user" => "00000000-6f0d-5bb9-ffff", "text" => "hff")));
+$params = array ('json' => json_encode(array ("user" => "00000000-6f0d-5bb9-ffff", "text" => "hff", "debug" => true)));
 //$params = array ('json' => json_encode(array ("fortuneid" => "1")));
 
 
