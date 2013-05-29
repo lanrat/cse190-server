@@ -28,7 +28,7 @@
       "INSERT INTO users 
       SELECT $1 
       WHERE NOT EXISTS(
-        SELECT userid FROM users WHERE userid = $1");
+        SELECT userid FROM users WHERE userid = $1)");
       $result = pg_execute($pg_conn, "createUser", $insert);
     }
 
