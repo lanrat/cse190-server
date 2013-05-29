@@ -117,7 +117,8 @@
 
         case "submitVote":
           $insert = array($fortune["fortuneid"],  $fortune["user"], $fortune["vote"]);                                
-          $result = pg_prepare($pg_conn, "submitVote", 'UPDATE viewed SET vote = $3 WHERE fortuneid = $1 AND userid = $2 ');
+          $result = pg_prepare($pg_conn, "submitVote",
+           'UPDATE viewed SET vote = $3 WHERE fortuneid = $1 AND userid = $2 AND vote = 0 ');
           $result = pg_execute($pg_conn, "submitVote", $insert);
    
           if($result == false)
@@ -129,14 +130,14 @@
               if($fortune["vote"] == 1)
               {
                 $result = pg_prepare($pg_conn, "upVote",
-                'UPDATE fortunes SET upvote =  1 + upvote WHERE fortuneid = 1');
-                $result = pg_execute($pg_conn, "upVote", $insert);
+                'UPDATE fortunes SET upvote =  1 + upvote WHERE fortuneid = $1');
+                $result = pg_execute($pg_conn, "upVote", array($fortune["fortuneid"]));
               }
               else 
               {
                 $result = pg_prepare($pg_conn, "downVote",
                 'UPDATE fortunes SET downvote = -1 + downvote WHERE fortuneid = $1');
-                $result = pg_execute($pg_conn, "downVote", $insert);             
+                $result = pg_execute($pg_conn, "downVote", array($fortune["fortuneid"]));             
               }
           }
           break;
