@@ -22,10 +22,10 @@
 
     public function createUser($userid){
       $insert = array($userid);
-        echo "plz work: " . $userid . "\n";
+        //echo "plz work: " . $userid . "\n";
       $result = pg_prepare($pg_conn, "createUser",
-      "INSERT INTO users (userid) 
-      SELECT $1 
+      "INSERT INTO users 
+      VALUES ($1) 
       WHERE NOT EXISTS(
         SELECT userid FROM users WHERE userid = $1");
       $result = pg_execute($pg_conn, "createUser", $insert);
@@ -39,7 +39,7 @@
       $fortune = json_decode($_POST['json'], true);
       // Store the user id if passed.
       if($fortune["user"] != NULL){
-        echo "plz work: " . $fortune["user"] . "\n";
+        //echo "plz work: " . $fortune["user"] . "\n";
         $this->createUser($fortune["user"]);
       }
       switch($method){
