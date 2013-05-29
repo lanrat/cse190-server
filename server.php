@@ -64,7 +64,6 @@
           $randomFortune = rand(0, count($rows) - 1);
           $chosen = $rows[$randomFortune];
           $this->processResult($chosen);
-          //echo var_dump($chosen);
 
 
           $result = pg_prepare($pg_conn, "insertView",
@@ -73,7 +72,6 @@
 
           $insert = array($fortune["user"], $chosen["fortuneid"]);
           $result = pg_execute($pg_conn, "insertView", $insert);
-          echo var_dump($result);
 
           break;
 
