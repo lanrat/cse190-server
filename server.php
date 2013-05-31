@@ -80,6 +80,7 @@
           $this->processResult($chosen);
 
 
+          // Update viewed
           $result = pg_prepare($pg_conn, "insertView",
           "INSERT INTO viewed
           VALUES ($1, $2, 0, 'false')");
@@ -87,7 +88,13 @@
           $insert = array($fortune["user"], $chosen["fortuneid"]);
           $result = pg_execute($pg_conn, "insertView", $insert);
 
+          // Update fortune
+          $result = pg_prepare($pg_conn, "submitVote",
+           'UPDATE fortunes SET views = views + 1 WHERE fortuneid = $2');
+          $result = pg_execute($pg_conn, "submitVote", $insert);
+
           break;
+
 
         case "getFortuneByID":
 
