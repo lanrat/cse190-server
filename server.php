@@ -125,7 +125,7 @@
           $result = pg_prepare($pg_conn, "submitVote",
            'UPDATE viewed SET vote = $3 WHERE fortuneid = $1 AND userid = $2 AND vote = 0 RETURNING vote');
           $result = pg_execute($pg_conn, "submitVote", $insert);
-   
+          echo pg_num_rows($result);
           if($result == false)
           {
               
