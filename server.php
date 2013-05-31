@@ -115,7 +115,17 @@
            RETURNING fortuneid, text, upvote, downvote, views, uploaddate');
 
           $result = pg_execute($pg_conn, "submitFortune", $insert);
-          $this->processResult(pg_fetch_assoc($result));
+          $inserted = pg_fetch_assoc($result);
+
+          $this->processResult($inserted);
+
+          
+          $result = pg_prepare($pg_conn, "insertView",
+          "INSERT INTO viewed
+          VALUES ($1, $2, 1, 'false')");
+
+          $insert = array($fortune["user"], $inserted["fortuneid"]);
+          $result = pg_execute($pg_conn, "insertView", $insert);
 
           break;
 
