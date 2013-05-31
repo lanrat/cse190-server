@@ -127,7 +127,7 @@
           $result = pg_execute($pg_conn, "submitVote", $insert);
           echo pg_num_rows($result);
 
-          if($result == 0)
+          if(pg_num_rows($result) == 0)
           {
               
           }
