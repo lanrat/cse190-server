@@ -20,39 +20,51 @@
       echo(json_encode($return));
     }
 
+    public function createUser($userid){
+      $insert = array($userid);
+      //var_dump($insert);
+      $pg_conn = pg_connect($this->heroku_conn());
+      $result = pg_prepare($pg_conn, "createUser",
+      "INSERT INTO users 
+      SELECT $1  
+      WHERE NOT EXISTS(
+        SELECT userid FROM users WHERE userid = $1)");
+      $result = pg_execute($pg_conn, "createUser", $insert);
+    }
+
     public function serve(){
       $method = $_GET['action'];
       if($method != NULL){
         $pg_conn = pg_connect($this->heroku_conn());
       }
-      $fortune;
+      $fortune = json_decode($_POST['json'], true);
+      // Store the user id if passed.
+      if($fortune["user"] != NULL){
+        //echo "plz work: " . $fortune["user"] . "\n";
+        $this->createUser($fortune["user"]);
+      }
       switch($method){
-
-
-
         /* Method name: getFortunesSubmitted
          * Parameters: Uploader ID
          * Returns: All fortunes uploaded by the user.
          */
         case "getFortunesSubmitted":
-          $fortune = json_decode($_POST['json'], true);
           $insert = array($fortune["user"]);
           $result = pg_prepare($pg_conn, "getFortunesSubmitted",
           'SELECT fortuneid, text, upvote, downvote, views, uploaddate 
           FROM fortunes WHERE uploader = $1');
-
 
           $result = pg_execute($pg_conn, "getFortunesSubmitted", $insert);
           $rows = pg_fetch_all($result);
           $this->processResult($rows);
           break;
 
+
         /* Method name: getFortune
          * Parameters: Fortune ID
          * Returns: All data about a specific fortune.
          */
         case "getFortune":
-          $fortune = json_decode($_POST['json'], true);
           $insert = array($fortune["user"]);
           $result = pg_prepare($pg_conn, "getFortune",
           'SELECT fortuneid, text, upvote, downvote, views, uploaddate 
@@ -64,7 +76,6 @@
           $randomFortune = rand(0, count($rows) - 1);
           $chosen = $rows[$randomFortune];
           $this->processResult($chosen);
-          //echo var_dump($chosen);
 
 
           $result = pg_prepare($pg_conn, "insertView",
@@ -78,7 +89,6 @@
 
         case "getFortuneByID":
 
-          $fortune = json_decode($_POST['json'], true);
           $insert = array($fortune["fortuneid"]);
           $result = pg_prepare($pg_conn, "getFortuneByID",
           'SELECT fortuneid, text, upvote, downvote, views, uploaddate 
@@ -97,7 +107,6 @@
          * Note: the time parameter is generated in php. 
          */
         case "submitFortune":
-          $fortune = json_decode($_POST['json'], true);
           $insert = array($fortune["text"],  $fortune["user"], time() );
          
           $result = pg_prepare($pg_conn, "submitFortune",
@@ -111,7 +120,7 @@
           break;
 
         case "submitVote":
-          $fortune = json_decode($_POST['json'], true);
+          // We need to change this to take a boolean for vote
           $insert = array($fortune["fortuneid"],  $fortune["user"], $fortune["vote"]);                                
           $result = pg_prepare($pg_conn, "submitVote",
            'UPDATE viewed SET vote = $3 WHERE fortuneid = $1 AND userid = $2 AND vote = 0 RETURNING vote');
@@ -123,7 +132,7 @@
           }
           else
           {
-              if($fortune["vote"] == 1)
+              if($fortune["vote"] == true)
               {
                 $result = pg_prepare($pg_conn, "upVote",
                 'UPDATE fortunes SET upvote =  1 + upvote WHERE fortuneid = $1');
@@ -145,7 +154,6 @@
          * Note: Database attributes: views, and flags increase by the parameters passed respectively.  
          */
         case "submitView":
-          $fortune = json_decode($_POST['json'], true);
           $insert = array($fortune["userid"], $fortune["fortuneid"], $fortune["vote"], $fortune["flagged"]);
           $result = pg_prepare($pg_conn, "submitView",
           'INSERT INTO viewed (userid, fortuneid, vote, flagged)
