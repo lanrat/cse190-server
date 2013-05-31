@@ -125,7 +125,7 @@
           $result = pg_prepare($pg_conn, "submitVote",
            'UPDATE viewed SET vote = $3 WHERE fortuneid = $1 AND userid = $2 AND vote = 0 RETURNING vote');
           $result = pg_execute($pg_conn, "submitVote", $insert);
-          echo pg_num_rows($result);
+          
 
           if(pg_num_rows($result) == 0)
           {
@@ -136,16 +136,17 @@
               if($fortune["vote"] == 1)
               {
                 $result = pg_prepare($pg_conn, "upVote",
-                'UPDATE fortunes SET upvote =  1 + upvote WHERE fortuneid = $1');
+                'UPDATE fortunes SET upvote =  1 + upvote WHERE fortuneid = $1 RETURNING upvote');
                 $result = pg_execute($pg_conn, "upVote", array($fortune["fortuneid"]));
               }
               else 
               {
                 $result = pg_prepare($pg_conn, "downVote",
-                'UPDATE fortunes SET downvote = -1 + downvote WHERE fortuneid = $1');
+                'UPDATE fortunes SET downvote = -1 + downvote WHERE fortuneid = $1 RETURNING downvote');
                 $result = pg_execute($pg_conn, "downVote", array($fortune["fortuneid"]));             
               }
           }
+          echo pg_num_rows($result);
           $this->processResult(pg_fetch_assoc($result));
           break;
 
