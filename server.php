@@ -126,7 +126,8 @@
            'UPDATE viewed SET vote = $3 WHERE fortuneid = $1 AND userid = $2 AND vote = 0 RETURNING vote');
           $result = pg_execute($pg_conn, "submitVote", $insert);
           echo pg_num_rows($result);
-          if($result == false)
+
+          if($result == 0)
           {
               
           }
@@ -145,6 +146,7 @@
                 $result = pg_execute($pg_conn, "downVote", array($fortune["fortuneid"]));             
               }
           }
+          $this->processResult(pg_fetch_assoc($result));
           break;
 
 
