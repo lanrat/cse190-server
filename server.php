@@ -22,7 +22,6 @@
 
     public function createUser($userid){
       $insert = array($userid);
-      //var_dump($insert);
       $pg_conn = pg_connect($this->heroku_conn());
       $result = pg_prepare($pg_conn, "createUser",
       "INSERT INTO users 
@@ -37,12 +36,15 @@
       if($method != NULL){
         $pg_conn = pg_connect($this->heroku_conn());
       }
+
+      // Grab the fortune.
       $fortune = json_decode($_POST['json'], true);
+
       // Store the user id if passed.
       if($fortune["user"] != NULL){
-        //echo "plz work: " . $fortune["user"] . "\n";
         $this->createUser($fortune["user"]);
       }
+
       switch($method){
         /* Method name: getFortunesSubmitted
          * Parameters: Uploader ID
@@ -130,14 +132,13 @@
           break;
 
         case "submitVote":
-          // We need to change this to take a boolean for vote
-          if($fortune["vote"] == true)
+          if($fortune["vote"] === true)
           {
               $fortune["vote"] = 1;
           }
           else
           {
-              $fortune["vote"] =-1;
+              $fortune["vote"] = -1;
           }
           $insert = array($fortune["fortuneid"],  $fortune["user"], $fortune["vote"]);                                
           $result = pg_prepare($pg_conn, "submitVote",
@@ -145,11 +146,7 @@
           $result = pg_execute($pg_conn, "submitVote", $insert);
           
 
-          if(pg_num_rows($result) == 0)
-          {
-              
-          }
-          else
+          if(pg_num_rows($result) != false)
           {
               if($fortune["vote"] == 1)
               {
@@ -164,10 +161,19 @@
                 $result = pg_execute($pg_conn, "downVote", array($fortune["fortuneid"]));             
               }
           }
+          else{
+            echo "PROBLEM HERE";
+          }
           $this->processResult(pg_fetch_assoc($result));
           break;
 
-
+        default:
+          /*echo "Default";
+          $fortune = json_decode($_POST['json']);
+          var_dump($fortune);
+          echo "<br><br> json = " . ($_POST['json']);*/
+          break;
+// NOT USED ---------------------------------------------------------
         /* Method name: submitView
          * Parameters: UploaderID, FortuneID, int Vote, int Flagged
          * Returns: void
@@ -189,12 +195,7 @@
             SET flagged = flagged + $4');
           break;
 
-        default:
-          /*echo "Default";
-          $fortune = json_decode($_POST['json']);
-          var_dump($fortune);
-          echo "<br><br> json = " . ($_POST['json']);*/
-          break;
+
       }
 
 // Logs -------------------------------------------------------------
