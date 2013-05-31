@@ -121,6 +121,14 @@
 
         case "submitVote":
           // We need to change this to take a boolean for vote
+          if($fortune["vote"] == true)
+          {
+              $fortune["vote"] = 1;
+          }
+          else
+          {
+              $fortune["vote"] =-1;
+          }
           $insert = array($fortune["fortuneid"],  $fortune["user"], $fortune["vote"]);                                
           $result = pg_prepare($pg_conn, "submitVote",
            'UPDATE viewed SET vote = $3 WHERE fortuneid = $1 AND userid = $2 AND vote = 0 RETURNING vote');
@@ -146,7 +154,6 @@
                 $result = pg_execute($pg_conn, "downVote", array($fortune["fortuneid"]));             
               }
           }
-          echo pg_num_rows($result);
           $this->processResult(pg_fetch_assoc($result));
           break;
 
