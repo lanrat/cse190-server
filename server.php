@@ -164,22 +164,13 @@
               else 
               {
                 $result = pg_prepare($pg_conn, "downVote",
-                'UPDATE fortunes SET downvote = -1 + downvote WHERE fortuneid = $1 RETURNING downvote');
+                'UPDATE fortunes SET downvote = 1 + downvote WHERE fortuneid = $1 RETURNING downvote');
                 $result = pg_execute($pg_conn, "downVote", array($fortune["fortuneid"]));             
               }
-          }
-          else{
-            echo "PROBLEM HERE";
           }
           $this->processResult(pg_fetch_assoc($result));
           break;
 
-        default:
-          /*echo "Default";
-          $fortune = json_decode($_POST['json']);
-          var_dump($fortune);
-          echo "<br><br> json = " . ($_POST['json']);*/
-          break;
 // NOT USED ---------------------------------------------------------
         /* Method name: submitView
          * Parameters: UploaderID, FortuneID, int Vote, int Flagged
@@ -202,7 +193,9 @@
             SET flagged = flagged + $4');
           break;
 
-
+        default:
+          $this->processResult(false);
+          break;
       }
 
 // Logs -------------------------------------------------------------
