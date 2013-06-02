@@ -96,6 +96,7 @@
           break;
 
 
+
         case "getFortuneByID":
 
           $insert = array($fortune["fortuneid"]);
