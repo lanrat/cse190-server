@@ -14,9 +14,9 @@
 
  <body>
  	
-  <div class="jumbotron subhead">
-  <div class="container" style="background-color:#483D8B;">
-    <h1 style="text-align:center;">Top Fortunes</h1>
+  <div class="jumbotron subhead" style="background-color:#483D8B;">
+  <div class="container" >
+    <h1 style="text-align:center; color:#fff;">Top Fortunes</h1>
 
   </div>
 	</div>
