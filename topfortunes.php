@@ -14,10 +14,10 @@
 
  <body>
  	
-  <div class = "page-header"><h1> TOP FORTUNES </h1></div>
+  <div class = "page-header" style="text-align: center;"><h1> TOP 25 Fortunes </h1></div>
   <div class="container">
          
-         <div class="hero-unit" style="text-align: center;">	
+   <h3> All-Time</h3>     
   <table class="table table-bordered table-striped">
    <thead>
     <tr>
@@ -53,6 +53,6 @@ $result->closeCursor();
    </tbody>
   </table>
 </div>
-</div>
+
  </body>
 </html>
