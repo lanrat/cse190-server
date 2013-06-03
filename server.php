@@ -184,10 +184,10 @@
               $fortune["vote"] = -1;
           }
           $insert = array($fortune["fortuneid"],  $fortune["user"], $fortune["vote"]);    
-          $previous = pg_prepare($pg_conn, "getVote",
-           'SELECT * from viewed WHERE fortuneid = $1 AND userid = $2');
-          $previous = pg_execute($pg_conn, "getVote", $insert);
-          while ($row = pg_fetch_row($previous)) {
+          $result = pg_prepare($pg_conn, "getVote",
+           'SELECT vote from viewed WHERE fortuneid = $1 AND userid = $2');
+          $result = pg_execute($pg_conn, "getVote", $insert);
+          while ($row = pg_fetch_row($result)) {
             echo "$row[0] \n";
           }
    
