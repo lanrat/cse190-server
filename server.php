@@ -208,15 +208,15 @@
           {
             if($oldvote == 1 )
             {
-                $result = pg_prepare($pg_conn, "upVote",
-                'UPDATE fortunes SET upvote =  upvote - 1 WHERE fortuneid = $1 RETURNING upvote');
-                $result = pg_execute($pg_conn, "upVote", array($fortune["fortuneid"]));
+                $result = pg_prepare($pg_conn, "upVoteDown",
+                'UPDATE fortunes SET upvote =  (upvote - 1) WHERE fortuneid = $1 RETURNING upvote');
+                $result = pg_execute($pg_conn, "upVoteDown", array($fortune["fortuneid"]));
             }
             else if($oldvote == -1)
             {
-                $result = pg_prepare($pg_conn, "downVote",
-                'UPDATE fortunes SET downvote = downvote - 1 WHERE fortuneid = $1 RETURNING downvote');
-                $result = pg_execute($pg_conn, "downVote", array($fortune["fortuneid"])); 
+                $result = pg_prepare($pg_conn, "downVoteDown",
+                'UPDATE fortunes SET downvote = (downvote - 1) WHERE fortuneid = $1 RETURNING downvote');
+                $result = pg_execute($pg_conn, "downVoteDown", array($fortune["fortuneid"])); 
             }
 
             
