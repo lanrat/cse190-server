@@ -235,8 +235,11 @@
            'UPDATE viewed SET flagged = true WHERE fortuneid = $1 AND userid = $2 RETURNING flagged');
           $result = pg_execute($pg_conn, "submitFlag", $insert);
 
-
           $this->processResult(pg_fetch_assoc($result));
+
+          $result = pg_prepare($pg_conn, "flagUp",
+          'UPDATE fortunes SET flags =  (1 + flags) WHERE fortuneid = $1 RETURNING flags');
+          $result = pg_execute($pg_conn, "flagUp", array($fortune["fortuneid"]));
           break;
 
         default:
