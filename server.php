@@ -196,7 +196,8 @@
           if(pg_num_rows($result) != false)
           {
             $diff = $previous - $result;
-            echo $diff;
+            echo $previous;
+            echo $result;
               if($fortune["vote"] == 1)
               {
                 $result = pg_prepare($pg_conn, "upVote",
