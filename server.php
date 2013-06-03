@@ -69,13 +69,48 @@
         case "getFortune":
           $insert = array($fortune["user"]);
           $result = pg_prepare($pg_conn, "getFortune",
-          'SELECT fortuneid, text, upvote, downvote, views, uploaddate 
+          'SELECT fortuneid, text, upvote, downvote, views, uploaddate, 
+          upvote - downvote as totalvote 
           FROM fortunes WHERE fortuneid NOT IN 
-          (SELECT fortuneid FROM viewed WHERE userid = $1)');
+          (SELECT fortuneid FROM viewed WHERE userid = $1)
+          ORDER BY totalvote DESC');
 
           $result = pg_execute($pg_conn, "getFortune", $insert);
           $rows = pg_fetch_all($result);
-          $randomFortune = rand(0, count($rows) - 1);
+
+
+          // Grab lowest weight to prevent negative weights.
+          $totalWeight = 0;
+          $lastRow = end($rows);
+          $bottomWeight = $lastRow["totalvote"];
+          
+
+          // Generate total weighting.
+          $newFortunes = array();
+          foreach($rows as $num => $row){
+            $totalWeight += $row["totalvote"] + $bottomWeight;
+            if(($row["upvote"] + $row["downvote"]) < 10){
+              $newFortunes[] = $num;
+            }
+          }
+          
+
+          // 50% chance of new fortune, 50% chance of algorithm
+          $fortuneType = rand(0, 1);
+
+          if($fortuneType == 0){
+            $randomFortune = $newFortunes[rand(0, count($newFortunes))];
+          }
+          else{
+            $randomWeight = rand(0, $totalWeight);
+            foreach($rows as $num => $row){
+              $randomWeight -= $row + $bottomWeight;
+              if($randomWeight <= 0){
+                $randomFortune = $num;
+              }
+            }
+          }
+
           $chosen = $rows[$randomFortune];
           $this->processResult($chosen);
 
