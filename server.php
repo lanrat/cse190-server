@@ -286,6 +286,12 @@
           }
           $this->processResult(pg_fetch_assoc($result));
           break;
+
+        default:
+          $this->processResult(false);
+          break;
+      }
+
 // Logs -------------------------------------------------------------
 
       date_default_timezone_set('America/Los_Angeles');
