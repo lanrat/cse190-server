@@ -126,7 +126,7 @@
           // Update fortune
           $result = pg_prepare($pg_conn, "updateViews",
            'UPDATE fortunes SET views = views + 1 WHERE fortuneid = $1');
-          $result = pg_execute($pg_conn, "updatetViews", array($chosen["fortuneid"]));
+          $result = pg_execute($pg_conn, "updateViews", array($chosen["fortuneid"]));
 
           break;
 
