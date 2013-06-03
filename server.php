@@ -236,12 +236,13 @@
           $this->processResult(pg_fetch_assoc($result));
           break;
 
-// NOT USED ---------------------------------------------------------
+//  ---------------------------------------------------------
         /* Method name: submitView
          * Parameters: UploaderID, FortuneID, int Vote, int Flagged
          * Returns: void
          * Note: Database attributes: views, and flags increase by the parameters passed respectively.  
          */
+
         case "submitFlag":
 
           $insert = array($fortune["fortuneid"],  $fortune["user"], $fortune["vote"]);    
@@ -254,11 +255,8 @@
           while ($row = pg_fetch_row($result)) {
             $oldvote = $row[0];
           }
-          echo $oldvote;
-
-
-
-
+           echo $fortune["vote"];
+            echo $oldvote;
 
           $result = pg_prepare($pg_conn, "submitFlag",
            'UPDATE viewed SET flagged = $3 WHERE fortuneid = $1 AND userid = $2 RETURNING flagged');
@@ -267,8 +265,7 @@
 
           if(pg_num_rows($result) != false)
           {
-            echo $fortune["vote"];
-            echo $oldvote;
+
             if($oldvote === t && $fortune["vote"] === false )
             {
 
