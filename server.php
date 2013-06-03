@@ -182,16 +182,14 @@
           {
               $fortune["vote"] = -1;
           }
-          $insert = array($fortune["fortuneid"],  $fortune["user"], $fortune["vote"]);    
-          
 
+          $insert = array($fortune["fortuneid"],  $fortune["user"], $fortune["vote"]);    
           $result = pg_prepare($pg_conn, "oldVote",
            'SELECT vote from viewed WHERE fortuneid = $1 AND userid = $2');
           $result = pg_execute($pg_conn, "oldVote", array($fortune["fortuneid"],  $fortune["user"]));
-          $oldvote;
-          while ($row = pg_fetch_row($result)) {
-            $oldvote = $row[0];
-          }
+
+          $row = pg_fetch_row($result);
+          $oldvote = $row[0];
 
           $result = pg_prepare($pg_conn, "submitVote",
            'UPDATE viewed SET vote = $3 WHERE fortuneid = $1 AND userid = $2 RETURNING vote');
