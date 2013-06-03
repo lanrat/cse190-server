@@ -187,7 +187,7 @@
           $previous = pg_prepare($pg_conn, "getVote",
            'SELECT vote from viewed WHERE fortuneid = $1 AND userid = $2');
           $previous = pg_execute($pg_conn, "getVote", $insert);
-
+                      echo $previous;
           $result = pg_prepare($pg_conn, "submitVote",
            'UPDATE viewed SET vote = $3 WHERE fortuneid = $1 AND userid = $2 RETURNING vote');
           $result = pg_execute($pg_conn, "submitVote", $insert);
@@ -196,7 +196,7 @@
           if(pg_num_rows($result) != false)
           {
             $diff = $previous - $result;
-            echo $previous;
+
             //echo $result;
               if($fortune["vote"] == 1)
               {
