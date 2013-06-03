@@ -13,10 +13,11 @@
  </head>
 
  <body>
+  <h3> TOP FORTUNES </H3>
   <div class="container">
          
          <div class="hero-unit" style="text-align: center;">	
-  <table class="table table-striped">
+  <table class="table table-striped table-hover">
    <thead>
     <tr>
      <th>Fortune</th>
@@ -43,7 +44,7 @@ while ($row = pg_fetch_row($result)) {
     echo "<td>" . htmlspecialchars($row[1]) . "</td>";
     echo "<td>" . htmlspecialchars($row[2]) . "</td>";
     echo "<td>" . $row[3] . "</td>";
-    echo "<td>" . date('Y-m-d',$row[8]) . "</td>";  
+    echo "<td>" . date('d-m-Y',$row[8]) . "</td>";  
     echo "</tr>";
 }
 $result->closeCursor();
