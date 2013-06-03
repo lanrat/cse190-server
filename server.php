@@ -104,7 +104,7 @@
           else{
             $randomWeight = rand(0, $totalWeight);
             foreach($rows as $num => $row){
-              $randomWeight -= $row + $bottomWeight;
+              $randomWeight -= $row["totalvote"] + $bottomWeight;
               if($randomWeight <= 0){
                 $randomFortune = $num;
               }
