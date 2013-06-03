@@ -267,7 +267,7 @@
 
           if(pg_num_rows($result) != false)
           {
-            if($oldvote === t && $fortune["vote"] === true  )
+            if($oldvote === t && $fortune["vote"] === false  )
             {
               echo "HI";
                 $result = pg_prepare($pg_conn, "flagDown",
@@ -283,6 +283,7 @@
                 'UPDATE fortunes SET flags =  (1 + flags) WHERE fortuneid = $1 RETURNING flags');
                 $result = pg_execute($pg_conn, "flagUp", array($fortune["fortuneid"]));
               }
+
 
 
           }
