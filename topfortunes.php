@@ -27,8 +27,8 @@
    <thead>
     <tr>
      <th>Fortune</th>
+     <th> Views </th>
      <th>Upvotes</th>
-     <th> Views </th
      <th>Downvotes</th>
      <th> Uploaded</th> 
     </tr>
@@ -52,7 +52,7 @@ while ($row = pg_fetch_row($result)) {
     echo "<td>" . htmlspecialchars($row[4]) . "</td>";    
     echo "<td>" . htmlspecialchars($row[2]) . "</td>";
     echo "<td>" . $row[3] . "</td>";
-    echo "<td>" . date('d-m-Y',$row[8]) . "</td>";  
+    echo "<td>" . date('m-d-Y',$row[8]) . "</td>";  
     echo "</tr>";
 }
 $result->closeCursor();
