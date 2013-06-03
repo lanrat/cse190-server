@@ -202,17 +202,24 @@
           $result = pg_prepare($pg_conn, "submitVote",
            'UPDATE viewed SET vote = $3 WHERE fortuneid = $1 AND userid = $2 RETURNING vote');
           $result = pg_execute($pg_conn, "submitVote", $insert);
-          $vote;
-          while ($row = pg_fetch_row($result)) {
-            $vote = $row[0];
-          }
-          echo $vote;
+
 
           if(pg_num_rows($result) != false)
           {
-          
+            if($oldvote == 1 )
+            {
+                $result = pg_prepare($pg_conn, "upVote",
+                'UPDATE fortunes SET upvote =  upvote - 1 WHERE fortuneid = $1 RETURNING upvote');
+                $result = pg_execute($pg_conn, "upVote", array($fortune["fortuneid"]));
+            }
+            else if($oldvote == -1)
+            {
+                $result = pg_prepare($pg_conn, "downVote",
+                'UPDATE fortunes SET downvote = downvote - 1 WHERE fortuneid = $1 RETURNING downvote');
+                $result = pg_execute($pg_conn, "downVote", array($fortune["fortuneid"])); 
+            }
 
-            //echo $result;
+            
               if($fortune["vote"] == 1)
               {
                 $result = pg_prepare($pg_conn, "upVote",
