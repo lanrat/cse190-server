@@ -9,9 +9,10 @@
       return $string;
     }
 
-    public function processResult($result){
+    public function processResult($result, $error){
       if($result != false){    
-        $return = array('accepted' => true, 'result' => array($result));
+        $return = array('accepted' => true, 'result' => array($result),
+                        'error' => $error);
       }
       else{
         $return = array('accepted' => false);
@@ -32,7 +33,8 @@
     }
 
     public function serve(){
-      $method = $_GET['action'];
+      $error = "Default Error";
+      $method = htmlspecialchars($_GET['action']);
       if($method != NULL){
         $pg_conn = pg_connect($this->heroku_conn());
       }
