@@ -124,9 +124,9 @@
           $result = pg_execute($pg_conn, "insertView", $insert);
 
           // Update fortune
-          $result = pg_prepare($pg_conn, "submitVote",
-           'UPDATE fortunes SET views = views + 1 WHERE fortuneid = $2');
-          $result = pg_execute($pg_conn, "submitVote", $insert);
+          $result = pg_prepare($pg_conn, "updateViews",
+           'UPDATE fortunes SET views = views + 1 WHERE fortuneid = $1');
+          $result = pg_execute($pg_conn, "updatetViews", array($chosen["fortuneid"]));
 
           break;
 
