@@ -197,7 +197,7 @@
           {
             $diff = $previous - $result;
             echo $previous;
-            echo $result;
+            //echo $result;
               if($fortune["vote"] == 1)
               {
                 $result = pg_prepare($pg_conn, "upVote",
