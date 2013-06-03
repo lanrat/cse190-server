@@ -22,7 +22,6 @@
 
     public function createUser($userid){
       $insert = array($userid);
-      //var_dump($insert);
       $pg_conn = pg_connect($this->heroku_conn());
       $result = pg_prepare($pg_conn, "createUser",
       "INSERT INTO users 
@@ -37,12 +36,15 @@
       if($method != NULL){
         $pg_conn = pg_connect($this->heroku_conn());
       }
+
+      // Grab the fortune.
       $fortune = json_decode($_POST['json'], true);
+
       // Store the user id if passed.
       if($fortune["user"] != NULL){
-        //echo "plz work: " . $fortune["user"] . "\n";
         $this->createUser($fortune["user"]);
       }
+
       switch($method){
         /* Method name: getFortunesSubmitted
          * Parameters: Uploader ID
@@ -67,17 +69,53 @@
         case "getFortune":
           $insert = array($fortune["user"]);
           $result = pg_prepare($pg_conn, "getFortune",
-          'SELECT fortuneid, text, upvote, downvote, views, uploaddate 
+          'SELECT fortuneid, text, upvote, downvote, views, uploaddate, 
+          upvote - downvote as totalvote 
           FROM fortunes WHERE fortuneid NOT IN 
-          (SELECT fortuneid FROM viewed WHERE userid = $1)');
+          (SELECT fortuneid FROM viewed WHERE userid = $1)
+          ORDER BY totalvote DESC');
 
           $result = pg_execute($pg_conn, "getFortune", $insert);
           $rows = pg_fetch_all($result);
-          $randomFortune = rand(0, count($rows) - 1);
+
+
+          // Grab lowest weight to prevent negative weights.
+          $totalWeight = 0;
+          $lastRow = end($rows);
+          $bottomWeight = $lastRow["totalvote"];
+          
+
+          // Generate total weighting.
+          $newFortunes = array();
+          foreach($rows as $num => $row){
+            $totalWeight += $row["totalvote"] + $bottomWeight;
+            if(($row["upvote"] + $row["downvote"]) < 10){
+              $newFortunes[] = $num;
+            }
+          }
+          
+
+          // 50% chance of new fortune, 50% chance of algorithm
+          $fortuneType = rand(0, 1);
+
+          if($fortuneType == 0){
+            $randomFortune = $newFortunes[rand(0, count($newFortunes))];
+          }
+          else{
+            $randomWeight = rand(0, $totalWeight);
+            foreach($rows as $num => $row){
+              $randomWeight -= $row["totalvote"] + $bottomWeight;
+              if($randomWeight <= 0){
+                $randomFortune = $num;
+              }
+            }
+          }
+
           $chosen = $rows[$randomFortune];
           $this->processResult($chosen);
 
 
+          // Update viewed
           $result = pg_prepare($pg_conn, "insertView",
           "INSERT INTO viewed
           VALUES ($1, $2, 0, 'false')");
@@ -85,7 +123,14 @@
           $insert = array($fortune["user"], $chosen["fortuneid"]);
           $result = pg_execute($pg_conn, "insertView", $insert);
 
+          // Update fortune
+          $result = pg_prepare($pg_conn, "updateViews",
+           'UPDATE fortunes SET views = views + 1 WHERE fortuneid = $1');
+          $result = pg_execute($pg_conn, "updateViews", array($chosen["fortuneid"]));
+
           break;
+
+
 
         case "getFortuneByID":
 
@@ -130,14 +175,13 @@
           break;
 
         case "submitVote":
-          // We need to change this to take a boolean for vote
-          if($fortune["vote"] == true)
+          if($fortune["vote"] === true)
           {
               $fortune["vote"] = 1;
           }
           else
           {
-              $fortune["vote"] =-1;
+              $fortune["vote"] = -1;
           }
           $insert = array($fortune["fortuneid"],  $fortune["user"], $fortune["vote"]);                                
           $result = pg_prepare($pg_conn, "submitVote",
@@ -145,11 +189,7 @@
           $result = pg_execute($pg_conn, "submitVote", $insert);
           
 
-          if(pg_num_rows($result) == 0)
-          {
-              
-          }
-          else
+          if(pg_num_rows($result) != false)
           {
               if($fortune["vote"] == 1)
               {
@@ -160,14 +200,14 @@
               else 
               {
                 $result = pg_prepare($pg_conn, "downVote",
-                'UPDATE fortunes SET downvote = -1 + downvote WHERE fortuneid = $1 RETURNING downvote');
+                'UPDATE fortunes SET downvote = 1 + downvote WHERE fortuneid = $1 RETURNING downvote');
                 $result = pg_execute($pg_conn, "downVote", array($fortune["fortuneid"]));             
               }
           }
           $this->processResult(pg_fetch_assoc($result));
           break;
 
-
+// NOT USED ---------------------------------------------------------
         /* Method name: submitView
          * Parameters: UploaderID, FortuneID, int Vote, int Flagged
          * Returns: void
@@ -190,10 +230,7 @@
           break;
 
         default:
-          /*echo "Default";
-          $fortune = json_decode($_POST['json']);
-          var_dump($fortune);
-          echo "<br><br> json = " . ($_POST['json']);*/
+          $this->processResult(false);
           break;
       }
 
