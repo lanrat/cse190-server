@@ -185,7 +185,7 @@
           }
           $insert = array($fortune["fortuneid"],  $fortune["user"], $fortune["vote"]);    
           $previous = pg_prepare($pg_conn, "getVote",
-           'SELECT vote from viewed WHERE fortuneid = $1 AND userid = $2');
+           'SELECT * from viewed WHERE fortuneid = $1 AND userid = $2');
           $previous = pg_execute($pg_conn, "getVote", $insert);
 
           echo var_dump($previous);
