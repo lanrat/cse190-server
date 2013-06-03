@@ -12,17 +12,12 @@ function pg_connection_string_from_database_url() {
 $pg_conn = pg_connect(pg_connection_string_from_database_url());
 
 $result = pg_query($pg_conn, "SELECT * FROM fortunes");
-?>
-<table> 
-<?while($row = pg_fetch_row($result)){
-?>
-<tr>
-<?
-  echo $row[0]  " "  $row[1]  " "  $row[2] "\n";
-  ?>
-</tr>
-  <?
+
+while($row = pg_fetch_row($result)){
+  echo $row[0] . " " . $row[1] . " " . $row[2] "\n" ;
+
 }
 
+
+
 ?>
-</table>
