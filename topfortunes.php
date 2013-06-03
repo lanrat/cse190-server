@@ -13,7 +13,8 @@
  </head>
 
  <body>
-  <h3> TOP FORTUNES </H3>
+ 	
+  <div class = "page-header"><h1> TOP FORTUNES </h1></div>
   <div class="container">
          
          <div class="hero-unit" style="text-align: center;">	
