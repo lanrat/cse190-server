@@ -28,6 +28,7 @@
     <tr>
      <th>Fortune</th>
      <th>Upvotes</th>
+     <th> Views </th
      <th>Downvotes</th>
      <th> Uploaded</th> 
     </tr>
@@ -48,6 +49,7 @@ $result = pg_query($pg_conn, "SELECT * FROM fortunes ORDER BY upvote DESC LIMIT 
 while ($row = pg_fetch_row($result)) {
     echo "<tr>";
     echo "<td>" . htmlspecialchars($row[1]) . "</td>";
+    echo "<td>" . htmlspecialchars($row[4]) . "</td>";    
     echo "<td>" . htmlspecialchars($row[2]) . "</td>";
     echo "<td>" . $row[3] . "</td>";
     echo "<td>" . date('d-m-Y',$row[8]) . "</td>";  
