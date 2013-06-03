@@ -11,7 +11,11 @@
    
   <title>Top 25 Fortunes</title>
  </head>
+
  <body>
+  <div class="container">
+         
+         <div class="hero-unit" style="text-align: center;">	
   <table class="table table-striped">
    <thead>
     <tr>
@@ -45,5 +49,7 @@ $result->closeCursor();
 ?>
    </tbody>
   </table>
+</div>
+</div>
  </body>
 </html>
