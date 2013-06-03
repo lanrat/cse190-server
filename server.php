@@ -187,8 +187,8 @@
           $previous = pg_prepare($pg_conn, "getVote",
            'SELECT * from viewed WHERE fortuneid = $1 AND userid = $2');
           $previous = pg_execute($pg_conn, "getVote", $insert);
-          $previous = pg_fetch_all($previous);
-          echo var_dump($previous);
+          $row = pg_fetch_assoc($previous);
+          echo var_dump($row);
           echo "\n\n";
           $result = pg_prepare($pg_conn, "submitVote",
            'UPDATE viewed SET vote = $3 WHERE fortuneid = $1 AND userid = $2 RETURNING vote');
