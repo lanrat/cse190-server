@@ -36,7 +36,7 @@ function pg_connection_string_from_database_url() {
 
 $pg_conn = pg_connect(pg_connection_string_from_database_url());
 
-$result = pg_query($pg_conn, "SELECT * FROM fortunes LIMIT 25");
+$result = pg_query($pg_conn, "SELECT * FROM fortunes DESC upvote LIMIT 25");
 
 while ($row = pg_fetch_row($result)) {
     echo "<tr>";
