@@ -1,4 +1,14 @@
  <head>
+
+
+         <meta charset="utf-8">
+         <title>Instabeatz</title>
+         <link rel="stylesheet" href="bootstrap\css\bootstrap.css">
+         <link rel="stylesheet" href="bootstrap/css/bootstrap.css">
+      <script src="boostrap/js/bootstrap.min.js"></script>
+      <script src="swfobject/swfobject.js"></script>
+     	<script src="swfobject/swfobject.js"></script>
+   
   <title>Top 25 Fortunes</title>
  </head>
  <body>
