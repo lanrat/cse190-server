@@ -2,7 +2,7 @@
 
 
          <meta charset="utf-8">
-         <title>Instabeatz</title>
+   
          <link rel="stylesheet" href="bootstrap\css\bootstrap.css">
          <link rel="stylesheet" href="bootstrap/css/bootstrap.css">
       <script src="boostrap/js/bootstrap.min.js"></script>
