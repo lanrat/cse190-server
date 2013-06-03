@@ -186,14 +186,43 @@
           {
               $fortune["vote"] = -1;
           }
-          $insert = array($fortune["fortuneid"],  $fortune["user"], $fortune["vote"]);                                
-          $result = pg_prepare($pg_conn, "submitVote",
-           'UPDATE viewed SET vote = $3 WHERE fortuneid = $1 AND userid = $2 AND vote = 0 RETURNING vote');
-          $result = pg_execute($pg_conn, "submitVote", $insert);
+          $insert = array($fortune["fortuneid"],  $fortune["user"], $fortune["vote"]);    
           
+
+          $result = pg_prepare($pg_conn, "oldVote",
+           'SELECT vote from viewed WHERE fortuneid = $1 AND userid = $2');
+          $result = pg_execute($pg_conn, "oldVote", array($fortune["fortuneid"],  $fortune["user"]));
+          $oldvote;
+          while ($row = pg_fetch_row($result)) {
+            $oldvote = $row[0];
+          }
+          echo $oldvote;
+
+
+
+
+
+          $result = pg_prepare($pg_conn, "submitVote",
+           'UPDATE viewed SET vote = $3 WHERE fortuneid = $1 AND userid = $2 RETURNING vote');
+          $result = pg_execute($pg_conn, "submitVote", $insert);
+
 
           if(pg_num_rows($result) != false)
           {
+            if($oldvote == 1 )
+            {
+                $result = pg_prepare($pg_conn, "upVoteDown",
+                'UPDATE fortunes SET upvote =  (upvote - 1) WHERE fortuneid = $1 RETURNING upvote');
+                $result = pg_execute($pg_conn, "upVoteDown", array($fortune["fortuneid"]));
+            }
+            else if($oldvote == -1)
+            {
+                $result = pg_prepare($pg_conn, "downVoteDown",
+                'UPDATE fortunes SET downvote = (downvote - 1) WHERE fortuneid = $1 RETURNING downvote');
+                $result = pg_execute($pg_conn, "downVoteDown", array($fortune["fortuneid"])); 
+            }
+
+            
               if($fortune["vote"] == 1)
               {
                 $result = pg_prepare($pg_conn, "upVote",
@@ -210,26 +239,57 @@
           $this->processResult(pg_fetch_assoc($result));
           break;
 
-// NOT USED ---------------------------------------------------------
+//  ---------------------------------------------------------
         /* Method name: submitView
          * Parameters: UploaderID, FortuneID, int Vote, int Flagged
          * Returns: void
          * Note: Database attributes: views, and flags increase by the parameters passed respectively.  
          */
-        case "submitView":
-          $insert = array($fortune["userid"], $fortune["fortuneid"], $fortune["vote"], $fortune["flagged"]);
-          $result = pg_prepare($pg_conn, "submitView",
-          'INSERT INTO viewed (userid, fortuneid, vote, flagged)
-           SELECT $1, $2, $3, $4
-           WHERE NOT EXISTS (SELECT userid FROM viewed WHERE
-           userid = $1
-           AND fortuneid = $2');
-           /*** Needs to be fixed****/
-          $result = pg_execute($pg_conn, "viewMaintenance", $insert);
 
-          $result = pg_prepare($pg_conn, "updateView", 'UPDATE fortunes WHERE fortuneID = $2 
-            SET views = views + $3 
-            SET flagged = flagged + $4');
+        case "submitFlag":
+
+          $insert = array($fortune["fortuneid"],  $fortune["user"], $fortune["vote"]);    
+          
+
+          $result = pg_prepare($pg_conn, "oldFlag",
+           'SELECT flagged from viewed WHERE fortuneid = $1 AND userid = $2');
+          $result = pg_execute($pg_conn, "oldFlag", array($fortune["fortuneid"],  $fortune["user"]));
+          $oldvote;
+          while ($row = pg_fetch_row($result)) {
+            $oldvote = $row[0];
+          }
+           echo $fortune["vote"];
+            echo $oldvote;
+
+          $result = pg_prepare($pg_conn, "submitFlag",
+           'UPDATE viewed SET flagged = $3 WHERE fortuneid = $1 AND userid = $2 RETURNING flagged');
+          $result = pg_execute($pg_conn, "submitFlag", $insert);
+
+
+          if(pg_num_rows($result) != false)
+          {
+
+            if($oldvote === t && $fortune["vote"] === f )
+            {
+
+                $result = pg_prepare($pg_conn, "flagDown",
+                'UPDATE fortunes SET flags =  (flags - 1) WHERE fortuneid = $1 RETURNING flags');
+                $result = pg_execute($pg_conn, "flagDown", array($fortune["fortuneid"]));
+            }
+
+
+            
+              if($fortune["vote"] === t && $oldvote === f)
+              {
+                $result = pg_prepare($pg_conn, "flagUp",
+                'UPDATE fortunes SET flags =  (1 + flags) WHERE fortuneid = $1 RETURNING flags');
+                $result = pg_execute($pg_conn, "flagUp", array($fortune["fortuneid"]));
+              }
+
+
+
+          }
+          $this->processResult(pg_fetch_assoc($result));
           break;
 
         default:
