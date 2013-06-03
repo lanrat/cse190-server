@@ -1,14 +1,14 @@
  <head>
-  <title>Employees</title>
+  <title>Top 25 Fortunes</title>
  </head>
  <body>
   <table>
    <thead>
     <tr>
-     <th>Employee ID</th>
-     <th>Last Name</th>
-     <th>First Name</th>
-     <th>Title</th>
+     <th>Fortune</th>
+     <th>Upvotes</th>
+     <th>Downvotes</th>
+
     </tr>
    </thead>
    <tbody>
@@ -26,9 +26,9 @@ $result = pg_query($pg_conn, "SELECT * FROM fortunes LIMIT 25");
 
 while ($row = pg_fetch_row($result)) {
     echo "<tr>";
-    echo "<td>" . $row[0] . "</td>";
     echo "<td>" . htmlspecialchars($row[1]) . "</td>";
     echo "<td>" . htmlspecialchars($row[2]) . "</td>";
+    echo "<td>" . $row[3] . "</td>";
     echo "</tr>";
 }
 $result->closeCursor();
