@@ -1,7 +1,18 @@
+ <head>
+  <title>Employees</title>
+ </head>
+ <body>
+  <table>
+   <thead>
+    <tr>
+     <th>Employee ID</th>
+     <th>Last Name</th>
+     <th>First Name</th>
+     <th>Title</th>
+    </tr>
+   </thead>
+   <tbody>
 <?php
-
-
-
 function pg_connection_string_from_database_url() {
   extract(parse_url($_ENV["DATABASE_URL"]));
   $string = "user=$user password=$pass host=$host dbname=" . substr($path, 1);
@@ -13,10 +24,16 @@ $pg_conn = pg_connect(pg_connection_string_from_database_url());
 
 $result = pg_query($pg_conn, "SELECT * FROM fortunes LIMIT 25");
 
-while($row = pg_fetch_row($result)){
-  echo $row[0] . " " . $row[1] . " " . $row[2];
+while ($row = pg_fetch_row($result)) {
+    echo "<tr>";
+    echo "<td>" . $row[0] . "</td>";
+    echo "<td>" . htmlspecialchars($row[1]) . "</td>";
+    echo "<td>" . htmlspecialchars($row[2]) . "</td>";
+    echo "</tr>";
 }
-
-
-
+$result->closeCursor();
 ?>
+   </tbody>
+  </table>
+ </body>
+</html>
