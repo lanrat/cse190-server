@@ -185,9 +185,9 @@
           }
           $insert = array($fortune["fortuneid"],  $fortune["user"], $fortune["vote"]);    
 
-          $result = pg_prepare($pg_conn, "getVote",
+          $result = pg_prepare($pg_conn, "get",
            'SELECT vote from viewed WHERE fortuneid = $1 AND userid = $2');
-          $result = pg_execute($pg_conn, "getVote", $insert);
+          $result = pg_execute($pg_conn, "get", $insert);
           while ($row = pg_fetch_row($result)) {
             echo "ba \n";
           }
