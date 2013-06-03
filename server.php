@@ -282,6 +282,7 @@
                 'UPDATE fortunes SET flags =  (1 + flags) WHERE fortuneid = $1 RETURNING flags');
                 $result = pg_execute($pg_conn, "flagUp", array($fortune["fortuneid"]));
               }
+              
 
           }
           $this->processResult(pg_fetch_assoc($result));
