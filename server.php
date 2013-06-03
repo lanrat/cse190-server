@@ -131,7 +131,6 @@
           break;
 
 
-
         case "getFortuneByID":
 
           $insert = array($fortune["fortuneid"]);
@@ -172,6 +171,10 @@
           $insert = array($fortune["user"], $inserted["fortuneid"]);
           $result = pg_execute($pg_conn, "insertView", $insert);
 
+          break;
+
+        case "submitFlag":
+          //$insert = array($fortune["user"], $fortune["
           break;
 
         case "submitVote":
