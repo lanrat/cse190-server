@@ -242,27 +242,50 @@
          * Returns: void
          * Note: Database attributes: views, and flags increase by the parameters passed respectively.  
          */
-        case "submitView":
-          $insert = array($fortune["userid"], $fortune["fortuneid"], $fortune["vote"], $fortune["flagged"]);
-          $result = pg_prepare($pg_conn, "submitView",
-          'INSERT INTO viewed (userid, fortuneid, vote, flagged)
-           SELECT $1, $2, $3, $4
-           WHERE NOT EXISTS (SELECT userid FROM viewed WHERE
-           userid = $1
-           AND fortuneid = $2');
-           /*** Needs to be fixed****/
-          $result = pg_execute($pg_conn, "viewMaintenance", $insert);
+        case "submitFlag":
 
-          $result = pg_prepare($pg_conn, "updateView", 'UPDATE fortunes WHERE fortuneID = $2 
-            SET views = views + $3 
-            SET flagged = flagged + $4');
+          $insert = array($fortune["fortuneid"],  $fortune["user"], $fortune["vote"]);    
+          
+
+          $result = pg_prepare($pg_conn, "oldFlag",
+           'SELECT flagged from viewed WHERE fortuneid = $1 AND userid = $2');
+          $result = pg_execute($pg_conn, "oldFlag", array($fortune["fortuneid"],  $fortune["user"]));
+          $oldvote;
+          while ($row = pg_fetch_row($result)) {
+            $oldvote = $row[0];
+          }
+          echo $oldvote;
+
+
+
+
+
+          $result = pg_prepare($pg_conn, "submitFlag",
+           'UPDATE viewed SET flagged = $3 WHERE fortuneid = $1 AND userid = $2 RETURNING flagged');
+          $result = pg_execute($pg_conn, "submitFlag", $insert);
+
+
+          if(pg_num_rows($result) != false)
+          {
+            if($oldvote === true )
+            {
+                $result = pg_prepare($pg_conn, "flagDown",
+                'UPDATE fortunes SET flags =  (flags - 1) WHERE fortuneid = $1 RETURNING flags');
+                $result = pg_execute($pg_conn, "flagDown", array($fortune["fortuneid"]));
+            }
+
+
+            
+              if($fortune["vote"] === true)
+              {
+                $result = pg_prepare($pg_conn, "flagUp",
+                'UPDATE fortunes SET flags =  (1 + flags) WHERE fortuneid = $1 RETURNING flags');
+                $result = pg_execute($pg_conn, "flagUp", array($fortune["fortuneid"]));
+              }
+
+          }
+          $this->processResult(pg_fetch_assoc($result));
           break;
-
-        default:
-          $this->processResult(false);
-          break;
-      }
-
 // Logs -------------------------------------------------------------
 
       date_default_timezone_set('America/Los_Angeles');
