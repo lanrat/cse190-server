@@ -12,7 +12,7 @@
   <title>Top 25 Fortunes</title>
  </head>
  <body>
-  <table>
+  <table class="table table-striped">
    <thead>
     <tr>
      <th>Fortune</th>
