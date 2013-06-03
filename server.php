@@ -189,6 +189,7 @@
           $previous = pg_execute($pg_conn, "getVote", $insert);
 
           echo var_dump($previous);
+          echo "\n\n";
           $result = pg_prepare($pg_conn, "submitVote",
            'UPDATE viewed SET vote = $3 WHERE fortuneid = $1 AND userid = $2 RETURNING vote');
           $result = pg_execute($pg_conn, "submitVote", $insert);
