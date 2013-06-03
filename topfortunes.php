@@ -14,7 +14,12 @@
 
  <body>
  	
-  <div class = "page-header" style="text-align: center;"><h1> TOP 25 Fortunes </h1></div>
+  <div class="jumbotron masthead">
+  <div class="container">
+    <h1>Top Fortunes</h1>
+
+  </div>
+	</div>
   <div class="container">
          
    <h3> All-Time</h3>     
