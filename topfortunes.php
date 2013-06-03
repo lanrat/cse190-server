@@ -18,7 +18,7 @@
   <div class="container">
          
          <div class="hero-unit" style="text-align: center;">	
-  <table class="table table-striped table-hover">
+  <table class=class="table table-bordered table-striped">
    <thead>
     <tr>
      <th>Fortune</th>
