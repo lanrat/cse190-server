@@ -2,6 +2,16 @@
 
   class Server{
 
+    private $error = false;
+
+    public function setError($result, $e){
+      if($result == false){
+        if($error == false){
+          $error = $e;
+        }
+      }
+    }
+
     public function heroku_conn() {
       extract(parse_url($_ENV["DATABASE_URL"]));
       $string = "user=$user password=$pass host=$host dbname=" . substr($path, 1);
@@ -9,13 +19,12 @@
       return $string;
     }
 
-    public function processResult($result, $error){
+    public function processResult($result){
       if($result != false){    
-        $return = array('accepted' => true, 'result' => array($result),
-                        'error' => $error);
+        $return = array('accepted' => true, 'result' => array($result));
       }
       else{
-        $return = array('accepted' => false);
+        $return = array('accepted' => false, 'error' => $error);
       }
 
       echo(json_encode($return));
@@ -30,6 +39,7 @@
       WHERE NOT EXISTS(
         SELECT userid FROM users WHERE userid = $1)");
       $result = pg_execute($pg_conn, "createUser", $insert);
+      $this->setError($result, "createUser");
     }
 
     public function serve(){
@@ -59,6 +69,7 @@
           FROM fortunes WHERE uploader = $1');
 
           $result = pg_execute($pg_conn, "getFortunesSubmitted", $insert);
+          $this->setError($result, "getFortunesSubmitted");
           $rows = pg_fetch_all($result);
           $this->processResult($rows);
           break;
@@ -78,6 +89,7 @@
           ORDER BY totalvote DESC');
 
           $result = pg_execute($pg_conn, "getFortune", $insert);
+          $this->setError($result, "getFortune: getting fortunes");
           $rows = pg_fetch_all($result);
 
 
@@ -124,11 +136,13 @@
 
           $insert = array($fortune["user"], $chosen["fortuneid"]);
           $result = pg_execute($pg_conn, "insertView", $insert);
+          $this->setError($result, "getFortune: inserting view");
 
           // Update fortune
           $result = pg_prepare($pg_conn, "updateViews",
            'UPDATE fortunes SET views = views + 1 WHERE fortuneid = $1');
           $result = pg_execute($pg_conn, "updateViews", array($chosen["fortuneid"]));
+          $this->setError($result, "getFortune: updating views");
 
           break;
 
@@ -142,6 +156,7 @@
 
 
           $result = pg_execute($pg_conn, "getFortuneByID", $insert);
+          $this->setError($result, "getFortuneByID");
           $row = pg_fetch_assoc($result);
           $this->processResult($row);
           
@@ -161,6 +176,7 @@
            RETURNING fortuneid, text, upvote, downvote, views, uploaddate');
 
           $result = pg_execute($pg_conn, "submitFortune", $insert);
+          $this->setError($result, "submitFortune: inserting fortune");
           $inserted = pg_fetch_assoc($result);
 
           $this->processResult($inserted);
@@ -172,6 +188,7 @@
 
           $insert = array($fortune["user"], $inserted["fortuneid"]);
           $result = pg_execute($pg_conn, "insertView", $insert);
+          $this->setError($result, "submitFortune: inserting into viewed");
 
           break;
 
@@ -189,6 +206,7 @@
           $result = pg_prepare($pg_conn, "oldVote",
            'SELECT vote from viewed WHERE fortuneid = $1 AND userid = $2');
           $result = pg_execute($pg_conn, "oldVote", array($fortune["fortuneid"],  $fortune["user"]));
+          $this->setError($result, "submitVote: selecting original vote");
 
           $row = pg_fetch_row($result);
           $oldvote = $row[0];
@@ -196,6 +214,7 @@
           $result = pg_prepare($pg_conn, "submitVote",
            'UPDATE viewed SET vote = $3 WHERE fortuneid = $1 AND userid = $2 RETURNING vote');
           $result = pg_execute($pg_conn, "submitVote", $insert);
+          $this->setError($result, "submitVote: updating views");
 
 
           if(pg_num_rows($result) != false)
@@ -226,6 +245,7 @@
               $result = pg_execute($pg_conn, "downVote", array($fortune["fortuneid"]));             
             }
           }
+          $this->setError($result, "submitVote: updating fortunes");
           $this->processResult(pg_fetch_assoc($result));
           break;
 
@@ -236,12 +256,14 @@
           $result = pg_prepare($pg_conn, "submitFlag",
            'UPDATE viewed SET flagged = true WHERE fortuneid = $1 AND userid = $2 RETURNING flagged');
           $result = pg_execute($pg_conn, "submitFlag", $insert);
+          $this->setError($result, "submitFlag: updating viewed");
 
           $this->processResult(pg_fetch_assoc($result));
 
           $result = pg_prepare($pg_conn, "flagUp",
           'UPDATE fortunes SET flags =  (1 + flags) WHERE fortuneid = $1 RETURNING flags');
           $result = pg_execute($pg_conn, "flagUp", array($fortune["fortuneid"]));
+          $this->setError($result, "submitFlag: updating fortunes");
           break;
 
         default:
