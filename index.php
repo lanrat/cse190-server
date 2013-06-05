@@ -26,6 +26,7 @@
   <table class="table table-bordered table-striped">
    <thead>
     <tr>
+     <th> Rank </th>
      <th>Fortune</th>
      <th> Views </th>
      <th>Upvotes</th>
@@ -44,16 +45,18 @@ function pg_connection_string_from_database_url() {
 
 $pg_conn = pg_connect(pg_connection_string_from_database_url());
 
-$result = pg_query($pg_conn, "SELECT * FROM fortunes ORDER BY upvote DESC LIMIT 25");
-
+$result = pg_query($pg_conn, "SELECT * FROM fortunes ORDER BY (upvote - downvote) DESC LIMIT 25");
+$i = 1;
 while ($row = pg_fetch_row($result)) {
     echo "<tr>";
+    echo "<td>" . htmlspecialchars($i) . "</td>";
     echo "<td>" . htmlspecialchars($row[1]) . "</td>";
     echo "<td>" . htmlspecialchars($row[4]) . "</td>";    
     echo "<td>" . htmlspecialchars($row[2]) . "</td>";
     echo "<td>" . $row[3] . "</td>";
     echo "<td>" . date('m-d-Y',$row[8]) . "</td>";  
     echo "</tr>";
+    $i += 1;
 }
 $result->closeCursor();
 ?>
