@@ -168,7 +168,7 @@
          * Note: the time parameter is generated in php. 
          */
         case "submitFortune":
-          $insert = array($fortune["text"],  $fortune["user"], time() );
+          $insert = array(trim($fortune["text"]),  $fortune["user"], time() );
          
           $result = pg_prepare($pg_conn, "submitFortune",
           'INSERT INTO fortunes ( text, uploader, uploaddate)
