@@ -10,6 +10,7 @@ $params = array ('json' => json_encode(array ("user" => "100", "vote" => false, 
 
 $query = http_build_query ($params);
  
+
 // Create Http context details
 $contextData = array (
                 'method' => 'POST',
