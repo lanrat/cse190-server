@@ -13,12 +13,13 @@
  	
   <div class="jumbotron subhead" style="background-color:#191970; padding: 20px;">
   <div class="container" >
-    <h1 style="text-align:center; color:#fff; font-size: 100px; line-height: 1; letter-spacing: -2px;">Top Fortunes of the Past Week</h1>
+    <h1 style="text-align:center; color:#fff; font-size: 100px; line-height: 1; letter-spacing: -2px;">Top Fortunes</h1>
 
   </div>
 	</div>
   <div class="container">
          
+   <h3> Uploaded in the Past Week</h3>     
   <table class="table table-bordered table-striped">
    <thead>
     <tr>
