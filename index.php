@@ -42,7 +42,7 @@ function pg_connection_string_from_database_url() {
 
 $pg_conn = pg_connect(pg_connection_string_from_database_url());
 
-$result = pg_query($pg_conn, "SELECT * FROM fortunes WHERE uploaddate < date_part('epoch'::text, now()) - 604800 ORDER BY (upvote - downvote) DESC, upvote DESC LIMIT 25");
+$result = pg_query($pg_conn, "SELECT * FROM fortunes WHERE uploaddate > date_part('epoch'::text, now()) - 604800 ORDER BY (upvote - downvote) DESC, upvote DESC LIMIT 25");
 $i = 1;
 while ($row = pg_fetch_row($result)) {
     echo "<tr>";
