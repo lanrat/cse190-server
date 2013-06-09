@@ -251,10 +251,10 @@
 
         case "submitFlag":
 
-          $insert = array($fortune["fortuneid"],  $fortune["user"]);    
+          $insert = array($fortune["fortuneid"],  $fortune["user"], time());    
 
           $result = pg_prepare($pg_conn, "submitFlag",
-           'UPDATE viewed SET flagged = true WHERE fortuneid = $1 AND userid = $2 RETURNING flagged');
+           'UPDATE viewed SET flagged = true, atime = $3 WHERE fortuneid = $1 AND userid = $2 RETURNING flagged');
           $result = pg_execute($pg_conn, "submitFlag", $insert);
           $this->setError($result, "submitFlag: updating viewed");
 
