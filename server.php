@@ -6,7 +6,7 @@
     private $debug = false;
 
     public function setError($result, $e){
-      $r = pg_fetch_assoc($result);
+      //$r = pg_fetch_assoc($result);
       if($debug){
         echo $e;
       }
