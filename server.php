@@ -7,6 +7,9 @@
 
     public function setError($result, $e){
       $r = pg_fetch_assoc($result);
+      if($debug){
+        echo $e;
+      }
       if($r == false){
         if($this->error === "false"){
           $this->error = $e;
