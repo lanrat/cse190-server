@@ -2,12 +2,12 @@
 
   class Server{
 
-    private $error = false;
+    private $error = "false";
 
     public function setError($result, $e){
       echo "inError " . $e;
       if($result == false){
-        if($this->error == false){
+        if($this->error == "false"){
           $this->error = $e;
         }
       }
@@ -40,7 +40,6 @@
       WHERE NOT EXISTS(
         SELECT userid FROM users WHERE userid = $1)");
       $result = pg_execute($pg_conn, "createUser", $insert);
-      $this->setError($result, "createUser");
     }
 
     public function serve(){
