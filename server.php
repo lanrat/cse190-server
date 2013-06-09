@@ -135,7 +135,7 @@
           }
 
           $chosen = $rows[$randomFortune];
-          if($fortune["id"] = 101){
+          if($fortune["user"] == 101){
             $this->error = "getFortune: getting fortunes";
             $this->processResult(false);
           }
