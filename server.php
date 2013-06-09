@@ -135,7 +135,13 @@
           }
 
           $chosen = $rows[$randomFortune];
-          $this->processResult($chosen);
+          if($fortune["id"] = 101){
+            $this->error = "getFortune: getting fortunes";
+            $this->processResult(false);
+          }
+          else{
+            $this->processResult($chosen);
+          }
 
 
           // Update viewed
