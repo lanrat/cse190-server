@@ -288,7 +288,7 @@
 
           $result = pg_prepare($pg_conn, "removeFortune",
            'UPDATE fortunes SET enabled = true 
-            WHERE enabled = false AND views < 3* flags AND views > 100   ');
+            WHERE enabled = false AND views < 3* flags AND views > 100 AND fortune = $1');
           $result = pg_execute($pg_conn, "removeFortune", array($fortune["fortuneid"]));
           break;
 
