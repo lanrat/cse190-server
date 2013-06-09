@@ -6,6 +6,7 @@
 
     public function setError($result, $e){
       if($result == false){
+        echo "infalse";
         if($error == false){
           $error = $e;
         }
