@@ -62,6 +62,7 @@
       } 
 
       if($fortune["debug"] != NULL){
+        echo "DBUG SET";
         $this->debug = true;
       }
 
