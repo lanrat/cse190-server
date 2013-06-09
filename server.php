@@ -99,7 +99,7 @@
 
           $result = pg_execute($pg_conn, "getFortune", $insert);
           $rows = pg_fetch_all($result);
-          //$this->setError($rows, "getFortune: getting fortunes");
+          $this->setError($rows, "getFortune: getting fortunes");
 
 
           // Grab lowest weight to prevent negative weights.
@@ -151,13 +151,13 @@
 
           $insert = array($fortune["user"], $chosen["fortuneid"]);
           $result = pg_execute($pg_conn, "insertView", $insert);
-         // $this->setError(pg_fetch_assoc($result), "getFortune: inserting view");
+          $this->setError(pg_fetch_assoc($result), "getFortune: inserting view");
 
           // Update fortune
           $result = pg_prepare($pg_conn, "updateViews",
            'UPDATE fortunes SET views = views + 1 WHERE fortuneid = $1');
           $result = pg_execute($pg_conn, "updateViews", array($chosen["fortuneid"]));
-          //$this->setError(pg_fetch_assoc($result), "getFortune: updating views");
+          $this->setError(pg_fetch_assoc($result), "getFortune: updating views");
 
           break;
 
@@ -288,7 +288,7 @@
 
           $result = pg_prepare($pg_conn, "removeFortune",
            'UPDATE fortunes SET enabled = true 
-            WHERE enabled = false AND views < 3* flags AND views > 100 AND fortune = $1');
+            WHERE enabled = false AND views < 3* flags AND views > 100 AND fortuneid = $1');
           $result = pg_execute($pg_conn, "removeFortune", array($fortune["fortuneid"]));
           break;
 
