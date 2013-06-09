@@ -55,7 +55,6 @@ while ($row = pg_fetch_row($result)) {
     echo "</tr>";
     $i += 1;
 }
-$result->closeCursor();
 ?>
    </tbody>
   </table>

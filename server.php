@@ -2,12 +2,20 @@
 
   class Server{
 
-    private $error = false;
+    private $error = "false";
+    private $debug = false;
 
     public function setError($result, $e){
-      if($result == false){
-        if($error == false){
-          $error = $e;
+      if($debug = true){
+        echo $result;
+        if($result == false){
+          echo var_dump($e);
+          echo "\n";
+          echo var_dump($this->error);
+          if($this->error === "false"){
+            echo " inside";
+            $this->error = $e;
+          }
         }
       }
     }
@@ -24,7 +32,7 @@
         $return = array('accepted' => true, 'result' => array($result));
       }
       else{
-        $return = array('accepted' => false, 'error' => $error);
+        $return = array('accepted' => false, 'error' => $this->error);
       }
 
       echo(json_encode($return));
@@ -39,11 +47,10 @@
       WHERE NOT EXISTS(
         SELECT userid FROM users WHERE userid = $1)");
       $result = pg_execute($pg_conn, "createUser", $insert);
-      $this->setError($result, "createUser");
     }
 
     public function serve(){
-      $error = "Default Error";
+      //$error = "Default Error";
       $method = htmlspecialchars($_GET['action']);
       if($method != NULL){
         $pg_conn = pg_connect($this->heroku_conn());
@@ -55,7 +62,14 @@
       // Store the user id if passed.
       if($fortune["user"] != NULL){
         $this->createUser($fortune["user"]);
+      } 
+
+      if($fortune["debug"] != NULL){
+        $this->debug = true;
+        echo "UGH\n";
+        echo $this->debug;
       }
+
 
       switch($method){
         /* Method name: getFortunesSubmitted
@@ -264,11 +278,7 @@
           'UPDATE fortunes SET flags =  (1 + flags) WHERE fortuneid = $1 RETURNING flags');
           $result = pg_execute($pg_conn, "flagUp", array($fortune["fortuneid"]));
           $this->setError($result, "submitFlag: updating fortunes");
-          $result = pg_prepare($pg_conn, "removeFortune",
-           'UPDATE fortunes SET enabled = true 
-            WHERE enabled = false AND views < 3* flags AND views > 100   ');
-          $result = pg_execute($pg_conn, "removeFortune", $insert);
-          
+
 
           break;
 
@@ -281,7 +291,7 @@
 
       date_default_timezone_set('America/Los_Angeles');
       $current = file_get_contents('serverlogs.log');
-      $current .= "\n\nNEW LOG: ";
+      $current .= "\n\n";
       $current .= date('l jS \of F Y h:i:s A');
       $current .= "---------------------------\n";
       $current .= "action: " . $method . "\n";
