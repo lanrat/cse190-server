@@ -43,7 +43,7 @@
     }
 
     public function serve(){
-      $error = "Default Error";
+      //$error = "Default Error";
       $method = htmlspecialchars($_GET['action']);
       if($method != NULL){
         $pg_conn = pg_connect($this->heroku_conn());
