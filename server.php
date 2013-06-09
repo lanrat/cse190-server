@@ -156,7 +156,7 @@
 
 
           $result = pg_execute($pg_conn, "getFortuneByID", $insert);
-          var_dump($result);
+          echo var_dump($result);
           $this->setError($result, "getFortuneByID");
           $row = pg_fetch_assoc($result);
           $this->processResult($row);
