@@ -6,11 +6,10 @@
     private $debug = false;
 
     public function setError($result, $e){
-      //$r = pg_fetch_assoc($result);
       if($debug){
         echo $e;
       }
-      if($r == false){
+      if($result == false){
         if($this->error === "false"){
           $this->error = $e;
         }
@@ -79,8 +78,8 @@
           FROM fortunes WHERE uploader = $1');
 
           $result = pg_execute($pg_conn, "getFortunesSubmitted", $insert);
-          $this->setError($result, "getFortunesSubmitted");
           $rows = pg_fetch_all($result);
+          $this->setError($rows, "getFortunesSubmitted");
           $this->processResult($rows);
           break;
 
@@ -99,8 +98,8 @@
           ORDER BY totalvote DESC');
 
           $result = pg_execute($pg_conn, "getFortune", $insert);
-          $this->setError($result, "getFortune: getting fortunes");
           $rows = pg_fetch_all($result);
+          $this->setError($rows, "getFortune: getting fortunes");
 
 
           // Grab lowest weight to prevent negative weights.
@@ -146,13 +145,13 @@
 
           $insert = array($fortune["user"], $chosen["fortuneid"]);
           $result = pg_execute($pg_conn, "insertView", $insert);
-          $this->setError($result, "getFortune: inserting view");
+          $this->setError(pg_fetch_assoc($result), "getFortune: inserting view");
 
           // Update fortune
           $result = pg_prepare($pg_conn, "updateViews",
            'UPDATE fortunes SET views = views + 1 WHERE fortuneid = $1');
           $result = pg_execute($pg_conn, "updateViews", array($chosen["fortuneid"]));
-          $this->setError($result, "getFortune: updating views");
+          $this->setError(pg_fetch_assoc($result), "getFortune: updating views");
 
           break;
 
@@ -170,8 +169,8 @@
       if($debug){
         echo "GOT HERE";
       }
-          $this->setError($result, "getFortuneByID");
           $row = pg_fetch_assoc($result);
+          $this->setError($row, "getFortuneByID");
           $this->processResult($row);
           
           break;
@@ -190,8 +189,8 @@
            RETURNING fortuneid, text, upvote, downvote, views, uploaddate');
 
           $result = pg_execute($pg_conn, "submitFortune", $insert);
-          $this->setError($result, "submitFortune: inserting fortune");
           $inserted = pg_fetch_assoc($result);
+          $this->setError($inserted, "submitFortune: inserting fortune");
 
           $this->processResult($inserted);
 
@@ -220,15 +219,15 @@
           $result = pg_prepare($pg_conn, "oldVote",
            'SELECT vote from viewed WHERE fortuneid = $1 AND userid = $2');
           $result = pg_execute($pg_conn, "oldVote", array($fortune["fortuneid"],  $fortune["user"]));
-          $this->setError($result, "submitVote: selecting original vote");
 
           $row = pg_fetch_row($result);
+          $this->setError($row, "submitVote: selecting original vote");
           $oldvote = $row[0];
 
           $result = pg_prepare($pg_conn, "submitVote",
            'UPDATE viewed SET vote = $3 WHERE fortuneid = $1 AND userid = $2 RETURNING vote');
           $result = pg_execute($pg_conn, "submitVote", $insert);
-          $this->setError($result, "submitVote: updating views");
+          //$this->setError($result, "submitVote: updating views");
 
 
           if(pg_num_rows($result) != false)
@@ -259,8 +258,9 @@
               $result = pg_execute($pg_conn, "downVote", array($fortune["fortuneid"]));             
             }
           }
-          $this->setError($result, "submitVote: updating fortunes");
-          $this->processResult(pg_fetch_assoc($result));
+          $r = pg_fetch_assoc($result);
+          $this->setError($r, "submitVote: updating fortunes");
+          $this->processResult($r);
           break;
 
         case "submitFlag":
@@ -270,14 +270,15 @@
           $result = pg_prepare($pg_conn, "submitFlag",
            'UPDATE viewed SET flagged = true, atime = $3 WHERE fortuneid = $1 AND userid = $2 RETURNING flagged');
           $result = pg_execute($pg_conn, "submitFlag", $insert);
-          $this->setError($result, "submitFlag: updating viewed");
+          $r = pg_fetch_assoc($result);
+          $this->setError($r, "submitFlag: updating viewed");
 
-          $this->processResult(pg_fetch_assoc($result));
+          $this->processResult(pg_fetch_assoc($r));
 
           $result = pg_prepare($pg_conn, "flagUp",
           'UPDATE fortunes SET flags =  (1 + flags) WHERE fortuneid = $1 RETURNING flags');
           $result = pg_execute($pg_conn, "flagUp", array($fortune["fortuneid"]));
-          $this->setError($result, "submitFlag: updating fortunes");
+          $this->setError(pg_fetch_assoc($result), "submitFlag: updating fortunes");
 
           $result = pg_prepare($pg_conn, "removeFortune",
            'UPDATE fortunes SET enabled = true 
