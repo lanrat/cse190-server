@@ -3,13 +3,18 @@
   class Server{
 
     private $error = "false";
+    private $debug = false;
 
     public function setError($result, $e){
-      echo "inError " . $e;
-      if($result == false){
-        if($this->error === "false"){
-          echo " inside";
-          $this->error = $e;
+      if($debug = true){
+        if($result == false){
+          echo var_dump($e);
+          echo "\n";
+          echo var_dump($this->error);
+          if($this->error === "false"){
+            echo " inside";
+            $this->error = $e;
+          }
         }
       }
     }
@@ -56,7 +61,12 @@
       // Store the user id if passed.
       if($fortune["user"] != NULL){
         $this->createUser($fortune["user"]);
+      } 
+
+      if($fortune["debug"] != NULL){
+        $this->debug = true;
       }
+
 
       switch($method){
         /* Method name: getFortunesSubmitted
