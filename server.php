@@ -7,6 +7,7 @@
 
     public function setError($result, $e){
       if($debug = true){
+        echo $result;
         if($result == false){
           echo var_dump($e);
           echo "\n";
