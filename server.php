@@ -7,7 +7,7 @@
     public function setError($result, $e){
       echo "inError " . $e;
       if($result == false){
-        if($this->error == "false"){
+        if($this->error === "false"){
           echo " inside";
           $this->error = $e;
         }
