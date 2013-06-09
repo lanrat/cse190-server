@@ -65,6 +65,8 @@
 
       if($fortune["debug"] != NULL){
         $this->debug = true;
+        echo "UGH\n";
+        echo $this->debug;
       }
 
 
