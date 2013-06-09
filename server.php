@@ -7,16 +7,9 @@
 
     public function setError($result, $e){
       $r = pg_fetch_assoc($result);
-      if($this->debug == true){
-        echo $result;
-        if($r == false){
-          echo var_dump($e);
-          echo "\n";
-          echo var_dump($this->error);
-          if($this->error === "false"){
-            echo " inside";
-            $this->error = $e;
-          }
+      if($r == false){
+        if($this->error === "false"){
+          $this->error = $e;
         }
       }
     }
