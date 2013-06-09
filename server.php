@@ -264,6 +264,12 @@
           'UPDATE fortunes SET flags =  (1 + flags) WHERE fortuneid = $1 RETURNING flags');
           $result = pg_execute($pg_conn, "flagUp", array($fortune["fortuneid"]));
           $this->setError($result, "submitFlag: updating fortunes");
+          $result = pg_prepare($pg_conn, "removeFortune",
+           'UPDATE fortunes SET enabled = true 
+            WHERE enabled = false AND views < 3* flags AND views > 100   ');
+          $result = pg_execute($pg_conn, "removeFortune", $insert);
+          
+
           break;
 
         default:
