@@ -8,6 +8,7 @@
       if($result == false){
         if($error == false){
           $error = $e;
+          echo "SHUD WORK";
         }
       }
     }
