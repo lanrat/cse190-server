@@ -6,8 +6,8 @@
 
     public function setError($result, $e){
       if($result == false){
-        if($this->$error == false){
-          $this->$error = $e;
+        if($this->error == false){
+          $this->error = $e;
         }
       }
     }
@@ -24,7 +24,7 @@
         $return = array('accepted' => true, 'result' => array($result));
       }
       else{
-        $return = array('accepted' => false, 'error' => $this->$error);
+        $return = array('accepted' => false, 'error' => $this->error);
       }
 
       echo(json_encode($return));
