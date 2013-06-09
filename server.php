@@ -264,6 +264,10 @@
           'UPDATE fortunes SET flags =  (1 + flags) WHERE fortuneid = $1 RETURNING flags');
           $result = pg_execute($pg_conn, "flagUp", array($fortune["fortuneid"]));
           $this->setError($result, "submitFlag: updating fortunes");
+
+          //$result = pg_prepare($pg_conn, "countflags
+
+
           break;
 
         default:
@@ -275,7 +279,7 @@
 
       date_default_timezone_set('America/Los_Angeles');
       $current = file_get_contents('serverlogs.log');
-      $current .= "\n\nNEW LOG: ";
+      $current .= "\n\n";
       $current .= date('l jS \of F Y h:i:s A');
       $current .= "---------------------------\n";
       $current .= "action: " . $method . "\n";
