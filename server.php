@@ -6,7 +6,7 @@
     private $debug = false;
 
     public function setError($result, $e){
-      if($debug == true){
+      if($this->debug == true){
         echo $result;
         if($result == false){
           echo var_dump($e);
