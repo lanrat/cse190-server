@@ -8,6 +8,7 @@
       echo "inError " . $e;
       if($result == false){
         if($this->error == "false"){
+          echo " inside";
           $this->error = $e;
         }
       }
