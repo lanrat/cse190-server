@@ -5,6 +5,7 @@
     private $error = false;
 
     public function setError($result, $e){
+      echo "inError " . $e;
       if($result == false){
         if($this->error == false){
           $this->error = $e;
